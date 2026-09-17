@@ -8,19 +8,34 @@
     android:background="?attr/colorOnSurfaceInverse"
     tools:context=".Search">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/Search"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:background="@drawable/searchbar"
-        app:queryHint="@string/keyword"
-        android:layout_height="50dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginStart="20dp"
-        app:iconifiedByDefault="false"
-        android:layout_marginEnd="20dp"
-        android:queryHint="@string/keyword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-122dp"
+        tools:layout_editor_absoluteY="32dp">
 
+        <ImageButton
+            android:id="@+id/Back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top"
+            android:layout_margin="30dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/transparent"
+            app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/Search"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/searchbar"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:queryHint="@string/keyword" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

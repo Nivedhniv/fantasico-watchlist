@@ -2,6 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="cardbg">?attr/colorSurfaceInverse</color>
     <color name="purple">#D5C7FF</color>
-    <color name="primary">@color/material_dynamic_neutral_variant0</color>
+    <color name="transparent">#03D5C7FF</color>
+    <color name="autodark">@color/material_dynamic_neutral_variant0</color>
 </resources>

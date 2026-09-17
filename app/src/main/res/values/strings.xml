@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">DoWatch</string>
     <string name="keyword">Watch - Track - Manage</string>
-    <string name="welcome">Whatdya wanna watch today</string>
+    <string name="greetings">Good Morning !!</string>
+    <string name="watching">Currently Watching</string>
+    <string name="plan">Plan To Watch</string>
+    <string name="completed">Completed</string>
 </resources>
