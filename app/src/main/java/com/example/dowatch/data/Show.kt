@@ -2,10 +2,16 @@ package com.example.dowatch.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-class Show {
     @Entity
-    data class movie(
+    data class Show(
         @PrimaryKey(autoGenerate = true)
-        val id: Int=0
+        val id: Int=0,
+        val externalId: String,
+        val title: String,
+        val posterurl:String,
+        val status: String,
+        val year: String,
+        val myrating: Float? = null,
+        val date: String? = null,
+        val notes: String? = null
     )
-}

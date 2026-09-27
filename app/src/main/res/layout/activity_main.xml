@@ -71,8 +71,24 @@
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:id="@+id/welcome"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:lines="4"
+                android:gravity="center"
+                android:text="Welcome To Dowatch Start by Searching your favorite shows And adding into the watchlist">
+
+            </TextView>
+        </LinearLayout>
         <ScrollView
-            android:id="@+id/scrollView2"
+            android:id="@+id/contentPanel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -98,10 +114,12 @@
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:paddingStart="10dp"
                     android:scrollbars="none">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/current"
                         android:orientation="horizontal">
 
                     </LinearLayout>
@@ -120,10 +138,12 @@
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:paddingStart="10dp"
                     android:scrollbars="none">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
+                        android:id="@+id/upcoming"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
@@ -142,12 +162,15 @@
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:paddingStart="10dp"
                     android:layout_marginTop="10dp">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/planwatch"
                         android:orientation="horizontal"
                         android:scrollbars="none">
+
                     </LinearLayout>
                 </HorizontalScrollView>
 
@@ -165,11 +188,14 @@
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:paddingStart="10dp"
+                    android:layout_marginBottom="100dp"
                     android:scrollbars="none">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/completed"
                         android:orientation="horizontal">
 
                     </LinearLayout>

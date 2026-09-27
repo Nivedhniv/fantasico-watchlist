@@ -2,8 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="150dp"
@@ -18,11 +18,12 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="centerCrop"
             android:id="@+id/img">
         </ImageView>
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="100dp"
             android:background="@drawable/toptobtmgradient"
             android:layout_gravity="bottom">
 
@@ -68,7 +69,7 @@
             android:layout_gravity="start|bottom"
             android:layout_margin="10dp"
             android:paddingBottom="20dp"
-            android:textColor="?attr/colorSurface"
+            android:textColor="?attr/colorSurfaceInverse"
             android:text="This is title"
             android:textSize="15dp"
             android:textStyle="bold">
@@ -76,13 +77,13 @@
         </TextView>
 
         <TextView
-            android:id="@+id/year"
+            android:id="@+id/yearposter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:textColor="?attr/colorSurface"
+            android:textColor="?attr/colorSurfaceInverse"
             android:layout_margin="10dp"
-            android:textSize="12dp"
+            android:textSize="12sp"
             android:text="2020"
             android:textStyle="bold">
 
