@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import android.view.inputmethod.InputMethodManager
 import android.content.Intent
+import android.widget.FrameLayout
 import com.google.android.material.snackbar.Snackbar
 
 class Search : AppCompatActivity() {
@@ -76,9 +77,10 @@ class Search : AppCompatActivity() {
         )
         //search actions
         searchtxt.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
+            val loading=findViewById<FrameLayout>(R.id.loading)
             override fun onQueryTextSubmit(query: String?): Boolean {
                 suggestions.visibility = View.GONE
+
                 searchMovies(query ?: "")
                 return true
             }
@@ -92,7 +94,6 @@ class Search : AppCompatActivity() {
                         findViewById<LinearLayout>(R.id.suggestionContainer)
 
                     lifecycleScope.launch {
-
                         val response = RetrofitClient.api.searchMovies(
                             BuildConfig.OMDB_API_KEY,
                             newText.trim()
@@ -139,7 +140,8 @@ class Search : AppCompatActivity() {
         suggestions.visibility = View.GONE
 
         lifecycleScope.launch {
-
+            val loading=findViewById<FrameLayout>(R.id.loading)
+            loading.visibility= View.VISIBLE
             try{
                 val response = RetrofitClient.api.searchMovies(
                     BuildConfig.OMDB_API_KEY,
@@ -169,7 +171,7 @@ class Search : AppCompatActivity() {
                     Glide.with(this@Search)
                         .load(result.Poster)
                         .into(poster)
-
+                    loading.visibility= View.GONE
                     resultsContainer.addView(movieCard)
 
                     movieCard.setOnClickListener {
