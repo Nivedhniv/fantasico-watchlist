@@ -7,35 +7,82 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnSurfaceInverse"
     tools:context=".Search">
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="-122dp"
         tools:layout_editor_absoluteY="32dp">
 
-        <ImageButton
-            android:id="@+id/Back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|top"
-            android:layout_margin="30dp"
-            android:layout_marginStart="16dp"
-            android:background="@color/transparent"
-            app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/Search"
+    <ImageButton
+        android:id="@+id/Back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|top"
+        android:layout_margin="30dp"
+        android:layout_marginStart="16dp"
+        android:background="@color/transparent"
+        app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/materialCardView"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="80dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/searchbar"
-            app:iconifiedByDefault="false"
+            android:outlineProvider="none"
+            android:layout_height="80dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:layout_marginTop="70dp"
+            app:cardCornerRadius="0dp"
+            android:orientation="horizontal"
+            android:gravity="center|center_vertical"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:outlineAmbientShadowColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:queryHint="@string/keyword" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/Search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/searchbar"
+                app:iconifiedByDefault="false"
+                app:queryHint="@string/keyword" />
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/resultarea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <GridLayout
+                android:layout_width="match_parent"
+                android:padding="5dp"
+                android:id="@+id/result"
+                android:layout_height="200dp"
+                android:columnCount="3"/>
+        </ScrollView>
+    </LinearLayout>
+        <ScrollView
+            android:id="@+id/searchSuggestions"
+            android:layout_width="match_parent"
+            android:background="@drawable/cardlight"
+            android:visibility="gone"
+            android:layout_height="300dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="145dp"
+            android:elevation="12dp"
+            app:cardCornerRadius="16dp">
+
+            <LinearLayout
+                android:id="@+id/suggestionContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </ScrollView>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

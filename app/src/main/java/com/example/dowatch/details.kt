@@ -1,13 +1,36 @@
 package com.example.dowatch
-
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import android.view.View
+import com.google.android.material.snackbar.Snackbar
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.app.DatePickerDialog
+import android.content.Intent
+import android.widget.EditText
+import android.widget.GridLayout
+import android.widget.HorizontalScrollView
+import android.widget.ImageButton
+import java.util.Calendar
+import android.widget.LinearLayout
+import jp.wasabeef.glide.transformations.BlurTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import  com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.coroutines.launch
+
 
 class details : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_details)
@@ -16,5 +39,157 @@ class details : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val id = intent.getStringExtra("id")
+        if (id != null) {
+            searchMoviedetail(id)
+        }
+        else{
+            Snackbar.make(findViewById(R.id.main), "Unable to load movie", Snackbar.LENGTH_SHORT).show()
+        }
+
+        val addshow=findViewById< ImageButton>(R.id.addbtn)
+
+        addshow.setOnClickListener {
+            val sheetview=layoutInflater.inflate(R.layout.add_show,null)
+            val dialog= BottomSheetDialog(this)
+            dialog.setContentView((sheetview))
+            dialog.show()
+            val rating=sheetview.findViewById<LinearLayout>(R.id.ratingSection)
+            rating.visibility=View.GONE
+            //date area
+            val date=sheetview.findViewById<EditText>(R.id.date)
+            val datearea=sheetview.findViewById<LinearLayout>(R.id.datesection)
+            datearea.visibility=View.GONE
+            //review
+            val reviewarea=sheetview.findViewById<LinearLayout>(R.id.reviewsection)
+            reviewarea.visibility=View.GONE
+
+            date.setOnClickListener {
+
+                val calendar = Calendar.getInstance()
+                val datePicker = DatePickerDialog(
+                    this,
+                    { _, year, month, day ->
+                        date.setText("$day/${month + 1}/$year")
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+                )
+
+                datePicker.show()
+            }
+
+            val bottomSheet = dialog.findViewById<View>(
+                com.google.android.material.R.id.design_bottom_sheet
+            )
+            bottomSheet?.let {
+                val behavior = BottomSheetBehavior.from(it)
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+                behavior.isDraggable = false
+            }
+
+            val status=arrayOf("Watching","completed","plan to watch","Upcoming")
+            val dropdown = sheetview.findViewById<AutoCompleteTextView>(R.id.status)
+
+            val adapter= ArrayAdapter(this,android.R.layout.simple_dropdown_item_1line,status)
+            dropdown.setAdapter(adapter)
+
+            dropdown.setOnItemClickListener { parent, _, position, _ ->
+
+                when (parent.getItemAtPosition(position).toString()) {
+
+                    "Watching" -> {
+                        rating.visibility=View.VISIBLE
+                        datearea.visibility=View.GONE
+                        reviewarea.visibility=View.VISIBLE
+                    }
+
+                    "completed" -> {
+                        rating.visibility=View.VISIBLE
+                        datearea.visibility=View.GONE
+                        reviewarea.visibility=View.VISIBLE
+                    }
+
+                    "plan to watch" -> {
+                        rating.visibility=View.GONE
+                        datearea.visibility=View.GONE
+                        reviewarea.visibility= View.GONE
+                    }
+
+                    "Upcoming" ->{
+                        rating.visibility=View.GONE
+                        datearea.visibility=View.VISIBLE
+                        reviewarea.visibility= View.GONE
+                    }
+                }
+                val closebtn=sheetview.findViewById<ImageButton>(R.id.closeBtn)
+                closebtn.setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
+        }
+
     }
+
+    private fun searchMoviedetail(id: String) {
+        lifecycleScope.launch {
+            try{
+                val response = RetrofitClient.api.getResult(
+                    BuildConfig.OMDB_API_KEY,
+                    id
+                )
+                val title=findViewById<TextView>(R.id.title)
+                val posterarea=findViewById<ImageView>(R.id.poster)
+                val year=findViewById<TextView>(R.id.year)
+                val rating=findViewById<TextView>(R.id.rating)
+                val about=findViewById<TextView>(R.id.about)
+                val header=findViewById<ImageView>(R.id.header)
+                val loading=findViewById<FrameLayout>(R.id.loading)
+                val content=findViewById<FrameLayout>(R.id.content)
+                val genres = response.Genre?.split(", ")
+
+                title.text=response.Title
+                year.text=response.Year
+                rating.text=response.imdbRating
+                about.text=response.Plot
+
+                val genreContainer = findViewById<LinearLayout>(R.id.genreContainer)
+
+                genres?.forEach { genre ->
+
+                    val genreView = layoutInflater.inflate(
+                        R.layout.categories,
+                        genreContainer,
+                        false
+                    )
+                    val text = genreView.findViewById<TextView>(R.id.genre)
+                    text.text = genre
+                    genreContainer.addView(genreView)
+                }
+
+                Glide.with(this@details)
+                    .load(response.Poster)
+                    .into(posterarea)
+
+                Glide.with(this@details)
+                    .load(response.Poster)
+                    .transform(
+                        CenterCrop(),
+                        BlurTransformation(25, 3)
+                    )
+                    .into(header)
+                loading.visibility=View.GONE
+                content.visibility=View.VISIBLE
+            }
+            catch (e: Exception){
+                Snackbar.make(findViewById(R.id.main), "Unable to load movie", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        val backbtn=findViewById<ImageButton>(R.id.Back)
+        backbtn.setOnClickListener {
+            finish()
+        }
+    }
+
 }

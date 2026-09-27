@@ -2,5 +2,13 @@
     android:shape="rectangle">
 
     <corners android:radius="16dp" />
+    <solid
+        android:color="?attr/colorOnSurfaceInverse">
 
+    </solid>
+    <stroke
+        android:color="?attr/colorPrimary"
+        android:width="2dp">
+
+    </stroke>
 </shape>

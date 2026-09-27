@@ -1,0 +1,10 @@
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/genre"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="5dp"
+    android:padding="5dp"
+    android:lines="1"
+    android:textSize="10sp"
+    android:background="@drawable/cardlight" />
