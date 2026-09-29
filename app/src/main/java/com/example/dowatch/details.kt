@@ -51,7 +51,7 @@ class details : AppCompatActivity() {
             Toast.makeText(this, "Unable to load movie", Toast.LENGTH_SHORT).show()
         }
 
-        val addshow = findViewById<ImageButton>(R.id.addbtn)
+        val addshow = findViewById<Button>(R.id.addbtn)
 
         addshow.setOnClickListener {
             val movie = movieDetails ?: return@setOnClickListener

@@ -61,9 +61,9 @@
                 android:id="@+id/Search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/searchbar"
+                android:background="@drawable/searchbar_new"
                 app:iconifiedByDefault="false"
-                app:queryHint="@string/keyword" />
+                app:queryHint="Search here" />
         </LinearLayout>
 
         <ScrollView
@@ -78,25 +78,29 @@
                 android:columnCount="3"/>
         </ScrollView>
     </LinearLayout>
-        <ScrollView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/searchSuggestions"
             android:layout_width="match_parent"
-            android:background="@drawable/cardlight"
+            android:background="?attr/colorSecondaryContainer"
             android:visibility="gone"
             android:layout_height="300dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="145dp"
-            android:elevation="12dp"
+            android:elevation="0dp"
             app:cardCornerRadius="16dp">
-
-            <LinearLayout
-                android:id="@+id/suggestionContainer"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:scrollbars="none">
+                <LinearLayout
+                    android:id="@+id/suggestionContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-            </LinearLayout>
-        </ScrollView>
+                </LinearLayout>
+            </ScrollView>
+        </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

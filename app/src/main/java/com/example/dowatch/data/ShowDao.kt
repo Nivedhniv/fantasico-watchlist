@@ -13,6 +13,9 @@ interface ShowDao{
     @Query("SELECT * FROM Show")
     suspend fun getAllShows(): List<Show>
 
+    @Query("SELECT * FROM Show WHERE id = :id")
+    suspend fun getOne(id: Int): Show?
+
     @Query("SELECT COUNT(*) FROM Show")
     suspend fun getShowCount(): Int
 }

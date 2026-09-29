@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -16,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
+
 
 class MainActivity : AppCompatActivity()
 {
@@ -47,11 +49,16 @@ class MainActivity : AppCompatActivity()
 
     }
     override fun onResume() {
+
         super.onResume()
         loadShows()
     }
     private fun loadShows() {
         lifecycleScope.launch {
+
+            val loading=findViewById<FrameLayout>(R.id.loading)
+            val content=findViewById<ScrollView>(R.id.content)
+
             val current=findViewById<LinearLayout>(R.id.current)
             val upcoming=findViewById<LinearLayout>(R.id.upcoming)
             val planning=findViewById<LinearLayout>(R.id.planwatch)
@@ -83,6 +90,12 @@ class MainActivity : AppCompatActivity()
                     .load(show.posterurl)
                     .into(image)
 
+                card.setOnClickListener {
+                    val intent = Intent(this@MainActivity, usr_details::class.java)
+                    intent.putExtra("SHOW_ID", show.id)
+                    startActivity(intent)
+                }
+
                 when (show.status) {
                     "Watching" -> current.addView(card)
                     "Upcoming" -> upcoming.addView(card)
@@ -92,14 +105,15 @@ class MainActivity : AppCompatActivity()
 
             }
             val count = app.database.showDao().getShowCount()
-            var content=findViewById<ScrollView>(R.id.contentPanel)
             var welcome=findViewById<LinearLayout>(R.id.welcome)
             if(count==0){
                 welcome.visibility= View.VISIBLE
                 content.visibility=View.GONE
+                loading.visibility=View.GONE
             }
             else{
                 content.visibility=View.VISIBLE
+                loading.visibility=View.GONE
                 welcome.visibility= View.GONE
             }
         }

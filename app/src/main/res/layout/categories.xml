@@ -6,5 +6,6 @@
     android:layout_marginStart="5dp"
     android:padding="5dp"
     android:lines="1"
+    android:text="Categories"
     android:textSize="10sp"
     android:background="@drawable/cardlight" />

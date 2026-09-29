@@ -40,13 +40,14 @@ class Search : AppCompatActivity() {
             insets
         }
 
-        val searchbox=findViewById<androidx.appcompat.widget.SearchView>(R.id.Search)
-        val suggestions = findViewById<ScrollView>(R.id.searchSuggestions)
+        val suggestions = findViewById<com.google.android.material.card.MaterialCardView>(R.id.searchSuggestions)
         val searchtxt = findViewById<SearchView>(R.id.Search)
         val backbtn = findViewById<ImageButton>(R.id.Back)
         val searchEditText = searchtxt.findViewById<EditText>(
             androidx.appcompat.R.id.search_src_text
         )
+        searchEditText.background = null
+        searchEditText.setPadding(0, 0, 0, 0)
 
         val searchIcon = searchtxt.findViewById<ImageView>(
             androidx.appcompat.R.id.search_mag_icon
@@ -57,22 +58,21 @@ class Search : AppCompatActivity() {
 
         val color = MaterialColors.getColor(
             searchtxt,
-            com.google.android.material.R.attr.colorOnSurface
+            com.google.android.material.R.attr.colorOnSurfaceInverse
         )
 
         val colordark = MaterialColors.getColor(
             searchtxt,
-            com.google.android.material.R.attr.colorOnSurfaceInverse
+            com.google.android.material.R.attr.colorOnSurface
         )
 
         closeIcon.setColorFilter(colordark)
         searchIcon.setColorFilter(colordark)
-        searchEditText.setHintTextColor(color)
 
         searchEditText.setTextColor(
             MaterialColors.getColor(
                 searchtxt,
-                com.google.android.material.R.attr.colorOnSurfaceInverse
+                com.google.android.material.R.attr.colorOnSurface
             )
         )
         //search actions
@@ -135,12 +135,14 @@ class Search : AppCompatActivity() {
         }
     }
     private fun searchMovies(query: String) {
-        val suggestions = findViewById<ScrollView>(R.id.searchSuggestions)
+        val suggestions = findViewById<com.google.android.material.card.MaterialCardView>(R.id.searchSuggestions)
 
         suggestions.visibility = View.GONE
 
         lifecycleScope.launch {
             val loading=findViewById<FrameLayout>(R.id.loading)
+            val resultarea=findViewById<ScrollView>(R.id.resultarea)
+            resultarea.visibility=View.GONE
             loading.visibility= View.VISIBLE
             try{
                 val response = RetrofitClient.api.searchMovies(
@@ -172,6 +174,7 @@ class Search : AppCompatActivity() {
                         .load(result.Poster)
                         .into(poster)
                     loading.visibility= View.GONE
+                    resultarea.visibility=View.VISIBLE
                     resultsContainer.addView(movieCard)
 
                     movieCard.setOnClickListener {
