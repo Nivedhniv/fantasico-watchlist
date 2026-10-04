@@ -26,7 +26,9 @@
             <TextView
                 android:id="@+id/greeting"
                 android:layout_width="150dp"
+                android:textStyle="bold"
                 android:textSize="20sp"
+                android:textColor="?attr/colorPrimary"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="20dp"
@@ -74,18 +76,47 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:id="@+id/welcome"
+            android:padding="20dp"
             android:visibility="gone"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:lines="4"
-                android:gravity="center"
-                android:text="Welcome To Dowatch Start by Searching your favorite shows And adding into the watchlist">
-
-            </TextView>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:background="@drawable/card"
+                android:layout_marginTop="150dp"
+                android:padding="30dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="200dp"
+                    android:layout_gravity="end"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:id="@+id/msg"
+                    android:background="@drawable/chatbubble"/>
+                <ImageView
+                    android:id="@+id/chip"
+                    android:layout_width="70dp"
+                    android:layout_gravity="start"
+                    android:layout_height="70dp"
+                    app:srcCompat="@drawable/waiting" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:padding="10dp"
+                    android:id="@+id/name"
+                    android:background="@drawable/cardlight"
+                    android:hint="Name"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="end"
+                    android:id="@+id/nameok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ok"/>
+            </LinearLayout>
         </LinearLayout>
         <FrameLayout
             android:layout_width="match_parent"
@@ -120,7 +151,8 @@
                     android:layout_marginTop="10dp"
                     android:paddingStart="20dp"
                     android:paddingEnd="0dp"
-                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
                     android:text="@string/watching">
                 </TextView>
 
@@ -144,7 +176,8 @@
                     android:layout_marginTop="10dp"
                     android:paddingStart="20dp"
                     android:paddingEnd="0dp"
-                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
                     android:text="Upcoming">
                 </TextView>
 
@@ -169,7 +202,8 @@
                     android:layout_marginTop="10dp"
                     android:paddingStart="20dp"
                     android:paddingEnd="0dp"
-                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
                     android:text="@string/plan">
                 </TextView>
 
@@ -194,7 +228,8 @@
                     android:layout_marginTop="10dp"
                     android:paddingStart="20dp"
                     android:paddingEnd="0dp"
-                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
                     android:text="@string/completed">
                 </TextView>
 
@@ -228,7 +263,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
-
     </ImageView>
 
 

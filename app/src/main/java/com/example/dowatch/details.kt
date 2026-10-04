@@ -39,11 +39,22 @@ class details : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_details)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+
+        val back = findViewById<ImageButton>(R.id.Back)
+        val poster = findViewById<com.google.android.material.card.MaterialCardView>(R.id.posterCard)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { _, insets ->
+
+            val systemBars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+            )
+
+            back.translationY = systemBars.top.toFloat()
+            poster.translationY = systemBars.top.toFloat()
+
             insets
         }
+
         val id = intent.getStringExtra("id")
         if (id != null) {
             searchMoviedetail(id)
