@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity()
 {
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -37,8 +36,7 @@ class MainActivity : AppCompatActivity()
         updateGreeting()
         val btn=findViewById<ImageButton>(R.id.searchpage)
         val acc=findViewById<ImageButton>(R.id.account)
-        btn.visibility=View.GONE
-        acc.visibility=View.GONE
+
         btn.setOnClickListener {
             val intent= Intent(this, Search::class.java)
             startActivity(intent)
@@ -127,13 +125,11 @@ class MainActivity : AppCompatActivity()
             }
             val count = app.database.showDao().getShowCount()
             val welcome=findViewById<LinearLayout>(R.id.welcome)
+            val toppanel=findViewById<LinearLayout>(R.id.toppanel)
             if(count==0){
                 loading.visibility=View.GONE
                 welcome.visibility= View.VISIBLE
                 content.visibility=View.GONE
-                val btn=findViewById<ImageButton>(R.id.searchpage)
-                val acc=findViewById<ImageButton>(R.id.account)
-
                 val name=findViewById<EditText>(R.id.name)
                 val nameok=findViewById<Button>(R.id.nameok)
                 val msg=findViewById<TextView>(R.id.msg)
@@ -161,8 +157,6 @@ class MainActivity : AppCompatActivity()
                             return@setOnClickListener
                         }
                         else{
-                            btn.visibility=View.VISIBLE
-                            acc.visibility=View.VISIBLE
                             prefs.edit()
                                 .putString("nickname", namestr)
                                 .apply()
@@ -176,6 +170,18 @@ class MainActivity : AppCompatActivity()
                                     msg.text = message.substring(0, index + 1)
                                 }, index * 40L)
                             }
+                            toppanel.visibility = View.INVISIBLE
+
+                            toppanel.post {
+                                toppanel.translationY = -toppanel.height.toFloat()
+
+                                toppanel.visibility = View.VISIBLE
+
+                                toppanel.animate()
+                                    .translationY(0f)
+                                    .setDuration(300)
+                                    .start()
+                            }
 
                             updateGreeting()
                             chip.setImageResource(R.drawable.happy)
@@ -185,8 +191,7 @@ class MainActivity : AppCompatActivity()
                     }
                 }
                 else{
-                    btn.visibility=View.VISIBLE
-                    acc.visibility=View.VISIBLE
+                    toppanel.visibility=View.VISIBLE
                     chip.setImageResource(R.drawable.happy)
                     val message="Hey $nickname Search for your favorite shows and to add into your watch list"
                     msg.text = ""
@@ -201,10 +206,7 @@ class MainActivity : AppCompatActivity()
                 }
             }
             else{
-                val btn=findViewById<ImageButton>(R.id.searchpage)
-                val acc=findViewById<ImageButton>(R.id.account)
-                btn.visibility=View.VISIBLE
-                acc.visibility=View.VISIBLE
+                toppanel.visibility= View.VISIBLE
                 content.visibility=View.VISIBLE
                 loading.visibility=View.GONE
                 welcome.visibility= View.GONE
