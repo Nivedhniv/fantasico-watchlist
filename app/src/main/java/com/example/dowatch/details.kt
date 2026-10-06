@@ -20,6 +20,7 @@ import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import java.util.Calendar
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.RatingBar
 import jp.wasabeef.glide.transformations.BlurTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -41,6 +42,9 @@ class details : AppCompatActivity() {
         setContentView(R.layout.activity_details)
 
         val back = findViewById<ImageButton>(R.id.Back)
+        back.setOnClickListener {
+            finish()
+        }
         val poster = findViewById<com.google.android.material.card.MaterialCardView>(R.id.posterCard)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { _, insets ->
@@ -57,7 +61,32 @@ class details : AppCompatActivity() {
 
         val id = intent.getStringExtra("id")
         if (id != null) {
-            searchMoviedetail(id)
+            lifecycleScope.launch {
+                val content =
+                    findViewById<FrameLayout>(R.id.contentusrdet)
+                val loading=findViewById<FrameLayout>(R.id.loading)
+                val success = searchMoviedetail(id)
+                if (success) {
+                    content.visibility = View.VISIBLE
+                    loading.visibility = View.GONE
+                }
+            }
+            val retry = findViewById<Button>(R.id.retry)
+            val errormsg = findViewById<LinearLayout>(R.id.error)
+            val content = findViewById<FrameLayout>(R.id.content)
+            val loading=findViewById<FrameLayout>(R.id.loading)
+            retry.setOnClickListener {
+                lifecycleScope.launch {
+                    errormsg.visibility = View.GONE
+                    loading.visibility = View.VISIBLE
+                    val success = searchMoviedetail(id)
+                    loading.visibility = View.GONE
+
+                    if (success) {
+                        content.visibility = View.VISIBLE
+                    }
+                }
+            }
         } else {
             Toast.makeText(this, "Unable to load movie", Toast.LENGTH_SHORT).show()
         }
@@ -73,75 +102,89 @@ class details : AppCompatActivity() {
 
     }
 
-    private fun searchMoviedetail(id: String) {
-        lifecycleScope.launch {
-            try {
-                val response = RetrofitClient.api.getResult(
-                    BuildConfig.OMDB_API_KEY,
-                    id
+    private suspend fun searchMoviedetail(id: String): Boolean {
+        return try {
 
+            val response = RetrofitClient.api.getResult(
+                BuildConfig.OMDB_API_KEY,
+                id
+            )
+
+            movieDetails = response
+
+            val title = findViewById<TextView>(R.id.title)
+            val posterarea = findViewById<ImageView>(R.id.poster)
+            val year = findViewById<TextView>(R.id.year)
+            val rating = findViewById<TextView>(R.id.rating)
+            val about = findViewById<TextView>(R.id.about)
+            val header = findViewById<ImageView>(R.id.header)
+
+            val genres = response.Genre?.split(", ")
+
+            title.text = response.Title
+            year.text = response.Year
+            rating.text = response.imdbRating
+            about.text = response.Plot
+
+            val genreContainer =
+                findViewById<LinearLayout>(R.id.genreContainer)
+
+            genreContainer.removeAllViews()
+
+            genres?.forEach { genre ->
+
+                val genreView = layoutInflater.inflate(
+                    R.layout.categories,
+                    genreContainer,
+                    false
                 )
-                movieDetails = response
 
-                val title = findViewById<TextView>(R.id.title)
-                val posterarea = findViewById<ImageView>(R.id.poster)
-                val year = findViewById<TextView>(R.id.year)
-                val rating = findViewById<TextView>(R.id.rating)
-                val about = findViewById<TextView>(R.id.about)
-                val header = findViewById<ImageView>(R.id.header)
-                val loading = findViewById<FrameLayout>(R.id.loading)
-                val content = findViewById<FrameLayout>(R.id.content)
-                val genres = response.Genre?.split(", ")
+                val text =
+                    genreView.findViewById<TextView>(R.id.genre)
 
-                title.text = response.Title
-                year.text = response.Year
-                rating.text = response.imdbRating
-                about.text = response.Plot
+                text.text = genre
 
-                val genreContainer = findViewById<LinearLayout>(R.id.genreContainer)
-
-                genres?.forEach { genre ->
-
-                    val genreView = layoutInflater.inflate(
-                        R.layout.categories,
-                        genreContainer,
-                        false
-                    )
-                    val text = genreView.findViewById<TextView>(R.id.genre)
-                    text.text = genre
-                    genreContainer.addView(genreView)
-                }
-
-                Glide.with(this@details)
-                    .load(response.Poster)
-                    .into(posterarea)
-
-                Glide.with(this@details)
-                    .load(response.Poster)
-                    .transform(
-                        CenterCrop(),
-                        BlurTransformation(25, 3)
-                    )
-                    .into(header)
-                loading.visibility = View.GONE
-                content.visibility = View.VISIBLE
-            } catch (e: Exception) {
-                Snackbar.make(
-                    findViewById(R.id.main),
-                    "Unable to load movie",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                genreContainer.addView(genreView)
             }
-        }
-        val backbtn = findViewById<ImageButton>(R.id.Back)
-        backbtn.setOnClickListener {
-            finish()
+
+            Glide.with(this@details)
+                .load(response.Poster)
+                .into(posterarea)
+
+            Glide.with(this@details)
+                .load(response.Poster)
+                .transform(
+                    CenterCrop(),
+                    BlurTransformation(25, 3)
+                )
+                .into(header)
+
+            true
+
+        } catch (e: Exception) {
+
+            val errormsg =
+                findViewById<LinearLayout>(R.id.error)
+
+            val content =
+                findViewById<FrameLayout>(R.id.content)
+
+            content.visibility = View.GONE
+            errormsg.visibility = View.VISIBLE
+
+            val goback =
+                findViewById<Button>(R.id.goback)
+
+            goback.setOnClickListener {
+                finish()
+            }
+
+            false
         }
     }
 
     //sheet function
     private fun Addshowsheet( id:String) {
-
         val sheetview = layoutInflater.inflate(
             R.layout.add_show,
             null
@@ -241,11 +284,19 @@ class details : AppCompatActivity() {
                     .into(posterurl)
 
             } catch (e: Exception) {
-                Snackbar.make(
-                    sheetview,
-                    "Unable to load movie",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                val errormsg=findViewById<LinearLayout>(R.id.error)
+                errormsg.visibility=View.VISIBLE
+                val goback=findViewById<Button>(R.id.goback)
+                val retry=findViewById<Button>(R.id.retry)
+
+                retry.setOnClickListener {
+                    lifecycleScope.launch{
+                        searchMoviedetail(id)
+                    }
+                }
+                goback.setOnClickListener {
+                    finish()
+                }
             }
         }
         //drop down finished
@@ -254,7 +305,7 @@ class details : AppCompatActivity() {
 
             if (dropdown.text.isNullOrBlank()) {
                 Toast.makeText(this, "Unable to load movie", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+                dialog.dismiss()
             }
 
             val response = movie ?: return@setOnClickListener

@@ -94,32 +94,40 @@ class Search : AppCompatActivity() {
                         findViewById<LinearLayout>(R.id.suggestionContainer)
 
                     lifecycleScope.launch {
-                        val response = RetrofitClient.api.searchMovies(
-                            BuildConfig.OMDB_API_KEY,
-                            newText.trim()
-                        )
-
-                        suggestionContainer.removeAllViews()
-
-                        response.Search?.forEach { result ->
-
-                            val suggestion = layoutInflater.inflate(
-                                R.layout.sugestion,
-                                suggestionContainer,
-                                false
+                        try {
+                            val response = RetrofitClient.api.searchMovies(
+                                BuildConfig.OMDB_API_KEY,
+                                newText.trim()
                             )
-                            val name = suggestion.findViewById<TextView>(R.id.Name)
-                            name.text = result.Title
 
-                            suggestion.setOnClickListener {
-                                // This is the result the user clicked
-                                val selectedTitle = result.Title ?: return@setOnClickListener
-                                searchEditText.setText(selectedTitle)
-                                searchMovies(selectedTitle)
+                            suggestionContainer.removeAllViews()
+
+                            response.Search?.forEach { result ->
+
+                                val suggestion = layoutInflater.inflate(
+                                    R.layout.sugestion,
+                                    suggestionContainer,
+                                    false
+                                )
+
+                                val name = suggestion.findViewById<TextView>(R.id.Name)
+                                name.text = result.Title
+
+                                suggestion.setOnClickListener {
+                                    val selectedTitle = result.Title ?: return@setOnClickListener
+
+                                    searchEditText.setText(selectedTitle)
+                                    searchMovies(selectedTitle)
+                                }
+
+                                suggestionContainer.addView(suggestion)
                             }
 
-                            suggestionContainer.addView(suggestion)
+                        } catch (e: Exception) {
+                            Log.e("SUGGESTION_ERROR", "Suggestion search failed", e)
 
+                            suggestionContainer.removeAllViews()
+                            suggestions.visibility = View.GONE
                         }
                     }
                 }
@@ -185,8 +193,16 @@ class Search : AppCompatActivity() {
                     }
                 }
             }
-            catch(e: Exception){
-                Snackbar.make(findViewById(R.id.main), "Unable to Connect", Snackbar.LENGTH_SHORT).show()
+            catch (e: Exception) {
+                Log.e("SEARCH_ERROR", "SEARCH FAILED", e)
+
+                loading.visibility = View.GONE
+
+                Snackbar.make(
+                    findViewById(R.id.main),
+                    "Unable to Connect",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }

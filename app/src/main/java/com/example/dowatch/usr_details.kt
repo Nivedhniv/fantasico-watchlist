@@ -21,7 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.launch
 import kotlin.collections.forEach
-
+import android.widget.Button
 
 class usr_details : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,8 @@ class usr_details : AppCompatActivity() {
         setContentView(R.layout.activity_usr_details)
 
         val back = findViewById<ImageButton>(R.id.Back)
-        val poster = findViewById<com.google.android.material.card.MaterialCardView>(R.id.posterCard)
+        val poster =
+            findViewById<com.google.android.material.card.MaterialCardView>(R.id.posterCard)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { _, insets ->
 
@@ -40,96 +41,121 @@ class usr_details : AppCompatActivity() {
 
             back.translationY = systemBars.top.toFloat()
             poster.translationY = systemBars.top.toFloat()
-
             insets
         }
         back.setOnClickListener {
             finish()
         }
 
-        val loading=findViewById<FrameLayout>(R.id.loading)
-        val content=findViewById<FrameLayout>(R.id.contentusrdet)
-        content.visibility=View.GONE
-        loading.visibility=View.VISIBLE
+        val loading = findViewById<FrameLayout>(R.id.loading)
+        val content = findViewById<FrameLayout>(R.id.contentusrdet)
+
         val showId = intent.getIntExtra("SHOW_ID", -1)
         lifecycleScope.launch {
-
 
             val app = application as Application
             val show = app.database.showDao().getOne(showId)
 
-            if(show !=null){
+            if (show != null) {
                 val title = findViewById<TextView>(R.id.title)
                 val year = findViewById<TextView>(R.id.year)
                 val usereview = findViewById<TextView>(R.id.usr_review)
                 val usrating = findViewById<TextView>(R.id.myrating)
-                val thirdpartyid=show.externalId
+                val thirdpartyid = show.externalId
 
                 searchMoviedetail(thirdpartyid)
-                title.text=show.title
-                year.text=show.year
+                val success = searchMoviedetail(thirdpartyid)
+                if (success) {
+                    content.visibility = View.VISIBLE
+                    loading.visibility = View.GONE
+                }
 
-                val norate=findViewById<LinearLayout>(R.id.norating)
-                val yesrate=findViewById<LinearLayout>(R.id.rating_area)
-                if(show.notes!=null&&show.myrating!=null){
-                    usereview.text=show.notes
+                title.text = show.title
+                year.text = show.year
+
+                val norate = findViewById<LinearLayout>(R.id.norating)
+                val yesrate = findViewById<LinearLayout>(R.id.rating_area)
+                if (show.notes != null && show.myrating != null) {
+                    usereview.text = show.notes
                     usrating.text = "${show.myrating ?: "No rating"}"
+                } else {
+                    norate.visibility = View.VISIBLE
+                    yesrate.visibility = View.GONE
                 }
-                else{
-                    norate.visibility=View.VISIBLE
-                    yesrate.visibility=View.GONE
-                }
+                val retry = findViewById<Button>(R.id.retry)
+                val errormsg = findViewById<LinearLayout>(R.id.error)
+                retry.setOnClickListener {
+                    lifecycleScope.launch {
+                        errormsg.visibility = View.GONE
+                        loading.visibility = View.VISIBLE
+                        val success = searchMoviedetail(thirdpartyid)
 
+                        loading.visibility = View.GONE
+
+                        if (success) {
+                            content.visibility = View.VISIBLE
+                        }
+                    }
+                }
             }
-            content.visibility=View.VISIBLE
-            loading.visibility=View.GONE
         }
     }
-    private suspend fun searchMoviedetail(id: String) {
-            try {
-                val response = RetrofitClient.api.getResult(
-                    BuildConfig.OMDB_API_KEY,
-                    id
+
+    private suspend fun searchMoviedetail(id: String): Boolean {
+        return try {
+            val errormsg = findViewById<LinearLayout>(R.id.error)
+            errormsg.visibility = View.GONE
+            val response = RetrofitClient.api.getResult(
+                BuildConfig.OMDB_API_KEY,
+                id
+            )
+            val header = findViewById<ImageView>(R.id.header)
+            val poster = findViewById<ImageView>(R.id.poster)
+            val rating = findViewById<TextView>(R.id.rating)
+            val genreContainer = findViewById<LinearLayout>(R.id.genreContainer)
+            val genres = response.Genre?.split(", ")
+            val about = findViewById<TextView>(R.id.about)
+
+            about.text = response.Plot
+            rating.text = response.imdbRating
+
+            genres?.forEach { genre ->
+                val genreView = layoutInflater.inflate(
+                    R.layout.categories,
+                    genreContainer,
+                    false
                 )
-                val header = findViewById<ImageView>(R.id.header)
-                val poster = findViewById<ImageView>(R.id.poster)
-                val rating = findViewById<TextView>(R.id.rating)
-                val genreContainer = findViewById<LinearLayout>(R.id.genreContainer)
-                val genres = response.Genre?.split(", ")
-                val about = findViewById<TextView>(R.id.about)
-
-                about.text=response.Plot
-                rating.text=response.imdbRating
-
-                genres?.forEach { genre ->
-                    val genreView = layoutInflater.inflate(
-                        R.layout.categories,
-                        genreContainer,
-                        false
-                    )
-                    val text = genreView.findViewById<TextView>(R.id.genre)
-                    text.text = genre
-                    genreContainer.addView(genreView)
-                }
-
-                Glide.with(this@usr_details)
-                    .load(response.Poster)
-                    .into(poster)
-
-                Glide.with(this@usr_details)
-                    .load(response.Poster)
-                    .transform(
-                        CenterCrop(),
-                        BlurTransformation(25, 3)
-                    )
-                    .into(header)
-
-            } catch (e: Exception) {
-                Snackbar.make(
-                    findViewById(R.id.main),
-                    "Unable to load movie",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                val text = genreView.findViewById<TextView>(R.id.genre)
+                text.text = genre
+                genreContainer.addView(genreView)
             }
+
+            Glide.with(this@usr_details)
+                .load(response.Poster)
+                .into(poster)
+
+            Glide.with(this@usr_details)
+                .load(response.Poster)
+                .transform(
+                    CenterCrop(),
+                    BlurTransformation(25, 3)
+                )
+                .into(header)
+
+            true
+
+        } catch (e: Exception) {
+            val errormsg = findViewById<LinearLayout>(R.id.error)
+            val content = findViewById<FrameLayout>(R.id.contentusrdet)
+            content.visibility = View.GONE
+            errormsg.visibility = View.VISIBLE
+            val goback = findViewById<Button>(R.id.goback)
+
+            goback.setOnClickListener {
+                finish()
+            }
+            false
         }
     }
+
+}

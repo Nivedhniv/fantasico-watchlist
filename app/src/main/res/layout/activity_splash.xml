@@ -7,11 +7,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Splash">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="40dp"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/error"
+            android:visibility="gone"
+            android:padding="30dp"
+            android:background="@drawable/cardlight">
+            <ImageView
+                android:id="@+id/dochicksad"
+                android:layout_width="150dp"
+                android:layout_gravity="center"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/sad" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:text="Bad Internet connection"
+                android:layout_height="wrap_content"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
 
+                <Button
+                    android:layout_width="fill_parent"
+                    android:text="Network Settings"
+                    android:id="@+id/nsettings"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:layout_width="fill_parent"
+                    android:text="Retry"
+                    android:id="@+id/retry"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:gravity="center"
+       android:visibility="visible"
+       android:id="@+id/splash"
        android:orientation="vertical">
        <ImageView
            android:id="@+id/dochick"

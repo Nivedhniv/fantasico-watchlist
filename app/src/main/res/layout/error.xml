@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="40dp"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/error"
+            android:padding="30dp"
+            android:background="@drawable/cardlight">
+            <ImageView
+                android:id="@+id/dochicksad"
+                android:layout_width="100dp"
+                android:layout_gravity="center"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/sad" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:text="Could not find the movie"
+                android:layout_height="wrap_content"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+            <Button
+                android:layout_width="fill_parent"
+                android:text="Retry"
+                android:id="@+id/retry"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="fill_parent"
+                android:text="Go Back"
+                android:id="@+id/goback"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
