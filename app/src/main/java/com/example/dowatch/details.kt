@@ -31,6 +31,7 @@ import com.bumptech.glide.Glide
 import com.example.dowatch.data.Show
 import  com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.launch
+import android.util.Log
 
 class details : AppCompatActivity() {
     private var movieDetails: OmdbResult? = null
@@ -62,8 +63,7 @@ class details : AppCompatActivity() {
         val id = intent.getStringExtra("id")
         if (id != null) {
             lifecycleScope.launch {
-                val content =
-                    findViewById<FrameLayout>(R.id.contentusrdet)
+                val content = findViewById<FrameLayout>(R.id.content)
                 val loading=findViewById<FrameLayout>(R.id.loading)
                 val success = searchMoviedetail(id)
                 if (success) {
@@ -81,7 +81,6 @@ class details : AppCompatActivity() {
                     loading.visibility = View.VISIBLE
                     val success = searchMoviedetail(id)
                     loading.visibility = View.GONE
-
                     if (success) {
                         content.visibility = View.VISIBLE
                     }
