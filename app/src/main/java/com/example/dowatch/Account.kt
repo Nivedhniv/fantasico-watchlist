@@ -1,7 +1,9 @@
 package com.example.dowatch
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,6 +21,11 @@ class Account : AppCompatActivity() {
             insets
         }
 
+        val terms=findViewById<LinearLayout>(R.id.terms)
+        terms.setOnClickListener{
+            val intent= Intent(this, Terms::class.java)
+            startActivity(intent)
+        }
 
         val backbtn=findViewById<ImageButton>(R.id.Back)
         backbtn.setOnClickListener {
