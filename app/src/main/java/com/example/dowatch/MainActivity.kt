@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.view.View
+import android.util.Log
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -20,6 +21,9 @@ import java.util.Calendar
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
+import android.view.ViewGroup
+import android.widget.PopupWindow
+import android.view.MotionEvent
 
 
 class MainActivity : AppCompatActivity()
@@ -96,7 +100,25 @@ class MainActivity : AppCompatActivity()
                     R.layout.moviecard,
                     null
                 )
-
+                card.setOnTouchListener { view, event ->
+                    when(event.action){
+                        MotionEvent.ACTION_DOWN->{
+                            view.animate()
+                                .scaleX(0.96f)
+                                .scaleY(0.96f)
+                                .setDuration(150)
+                                .start()
+                        }
+                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->{
+                            view.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(150)
+                                .start()
+                        }
+                    }
+                    false
+                }
                 val image = card.findViewById<ImageView>(R.id.img)
                 val title = card.findViewById<TextView>(R.id.title)
                 val year = card.findViewById<TextView>(R.id.yearposter)
@@ -113,7 +135,11 @@ class MainActivity : AppCompatActivity()
                     intent.putExtra("SHOW_ID", show.id)
                     startActivity(intent)
                 }
-
+                card.setOnLongClickListener {
+                    val showid=show.id.toString()
+                    popup(card,showid)
+                    true
+                }
                 when (show.status) {
                     "Currently Watching" -> current.addView(card)
                     "Upcoming" -> upcoming.addView(card)
@@ -210,5 +236,30 @@ class MainActivity : AppCompatActivity()
                 welcome.visibility= View.GONE
             }
         }
+    }
+    private fun popup(anchor: View, id: String) {
+        val popupView = layoutInflater.inflate(
+            R.layout.buttongroup,
+            null
+        )
+
+        val popupWindow = PopupWindow(
+            popupView,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true
+        )
+        val info=popupView.findViewById<LinearLayout>(R.id.info)
+        info.setOnClickListener {
+            popupWindow.dismiss()
+            Log.d("Popup", "Show ID: $id")
+            val intid=id.toInt()
+            val intent = Intent(this@MainActivity, usr_details::class.java)
+            intent.putExtra("SHOW_ID", intid)
+            startActivity(intent)
+        }
+        val delete=popupView.findViewById<LinearLayout>(R.id.delete)
+        popupWindow.elevation = 12f
+        popupWindow.showAsDropDown(anchor,230,-250)
     }
 }

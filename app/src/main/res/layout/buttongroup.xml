@@ -1,40 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+<com.google.android.material.card.MaterialCardView
+    android:background="?attr/colorPrimaryContainer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="wrap_content"
+        android:id="@+id/popup"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/statusGroup"
-            android:layout_width="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/info"
+            android:padding="10dp"
             android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:selectionRequired="true">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnWatching"
-                style="@style/Widget.Material3.Button"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Watching" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCompleted"
-                style="@style/Widget.Material3.Button"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/info" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textColor="?attr/colorOnPrimaryContainer"
+                android:layout_height="wrap_content"
+                android:text="Info" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/delete"
+            android:clickable="true"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:orientation="horizontal">
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Completed" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnOnHold"
-                style="@style/Widget.Material3.Button"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/delete" />
+            <TextView
                 android:layout_width="wrap_content"
+                android:textColor="?attr/colorError"
                 android:layout_height="wrap_content"
-                android:text="On Hold" />
-
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+                android:text="Remove" />
+        </LinearLayout>
     </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
