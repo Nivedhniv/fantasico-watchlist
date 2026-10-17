@@ -113,6 +113,7 @@ class usr_details : AppCompatActivity() {
             val poster = findViewById<ImageView>(R.id.poster)
             val rating = findViewById<TextView>(R.id.rating)
             val genreContainer = findViewById<LinearLayout>(R.id.genreContainer)
+            genreContainer.removeAllViews()
             val genres = response.Genre?.split(", ")
             val about = findViewById<TextView>(R.id.about)
 

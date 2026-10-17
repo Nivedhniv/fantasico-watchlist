@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity()
     }
     private fun loadShows() {
         lifecycleScope.launch {
-
             val loading=findViewById<FrameLayout>(R.id.loading)
             val content=findViewById<ScrollView>(R.id.content)
 
@@ -116,12 +115,11 @@ class MainActivity : AppCompatActivity()
                 }
 
                 when (show.status) {
-                    "Watching" -> current.addView(card)
+                    "Currently Watching" -> current.addView(card)
                     "Upcoming" -> upcoming.addView(card)
-                    "Plan to watch" -> planning.addView(card)
+                    "Plan To Watch" -> planning.addView(card)
                     "Completed" -> completed.addView(card)
                 }
-
             }
             val count = app.database.showDao().getShowCount()
             val welcome=findViewById<LinearLayout>(R.id.welcome)

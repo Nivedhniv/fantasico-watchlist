@@ -32,6 +32,7 @@ import com.example.dowatch.data.Show
 import  com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.launch
 import android.util.Log
+import com.google.android.material.button.MaterialButtonToggleGroup
 
 class details : AppCompatActivity() {
     private var movieDetails: OmdbResult? = null
@@ -209,7 +210,6 @@ class details : AppCompatActivity() {
         //working sheets
         val posterurl = sheetview.findViewById<ImageView>(R.id.posterurl)
         val showrating = sheetview.findViewById<RatingBar>(R.id.ratingBar)
-        val showdate = sheetview.findViewById<EditText>(R.id.date)
         val review =
             sheetview.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.review)
         val formtitle = sheetview.findViewById<TextView>(R.id.titleform)
@@ -218,53 +218,24 @@ class details : AppCompatActivity() {
         reviewarea.visibility = View.GONE
         val ratingarea = sheetview.findViewById<LinearLayout>(R.id.ratingSection)
         ratingarea.visibility = View.GONE
-        val datearea = sheetview.findViewById<LinearLayout>(R.id.datearea)
-        datearea.visibility = View.GONE
-
-        //dropdown
-
-        val statusOptions = arrayOf(
-            "Watching",
-            "Completed",
-            "Plan to watch",
-            "Upcoming"
+        val statusGroup = sheetview.findViewById<MaterialButtonToggleGroup>(
+            R.id.statusGroup
         )
-        val dropdown = sheetview.findViewById<AutoCompleteTextView>(R.id.status)
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_dropdown_item_1line,
-            statusOptions
-        )
-        dropdown.setAdapter(adapter)
 
-        dropdown.setOnItemClickListener { parent, _, position, _ ->
-
-            when (parent.getItemAtPosition(position).toString()) {
-
-                "Watching" -> {
-                    ratingarea.visibility = View.VISIBLE
-                    datearea.visibility = View.GONE
-                    reviewarea.visibility = View.VISIBLE
+        var curstatus = "null"
+        statusGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                val addmovie = sheetview.findViewById<Button>(R.id.Addmovie)
+                addmovie.visibility = View.VISIBLE
+                curstatus = when (checkedId) {
+                    R.id.btnWatching -> "Currently Watching"
+                    R.id.btnCompleted -> "Completed"
+                    R.id.btnTowatch -> "Plan To Watch"
+                    else -> curstatus
                 }
-
-                "Completed" -> {
-                    ratingarea.visibility = View.VISIBLE
-                    datearea.visibility = View.GONE
-                    reviewarea.visibility = View.VISIBLE
-                }
-
-                "Plan to watch" -> {
-                    ratingarea.visibility = View.GONE
-                    datearea.visibility = View.GONE
-                    reviewarea.visibility = View.GONE
-                }
-
-                "Upcoming" -> {
-                    ratingarea.visibility = View.GONE
-                    datearea.visibility = View.VISIBLE
-                    reviewarea.visibility = View.GONE
-
-                }
+                val showReview = checkedId != R.id.btnTowatch
+                ratingarea.visibility = if (showReview) View.VISIBLE else View.GONE
+                reviewarea.visibility = if (showReview) View.VISIBLE else View.GONE
             }
         }
         lifecycleScope.launch {
@@ -300,11 +271,15 @@ class details : AppCompatActivity() {
         }
         //drop down finished
         val addmovie = sheetview.findViewById<Button>(R.id.Addmovie)
-        addmovie.setOnClickListener {
 
-            if (dropdown.text.isNullOrBlank()) {
-                Toast.makeText(this, "Unable to load movie", Toast.LENGTH_SHORT).show()
-                dialog.dismiss()
+        addmovie.setOnClickListener {
+            if (curstatus == "null") {
+                Toast.makeText(
+                    this@details,
+                    "Select a status",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
             }
 
             val response = movie ?: return@setOnClickListener
@@ -313,24 +288,38 @@ class details : AppCompatActivity() {
                 externalId = response.imdbID ?: return@setOnClickListener,
                 title = response.Title ?: return@setOnClickListener,
                 posterurl = response.Poster ?: "",
-                status = dropdown.text.toString(),
+                status = curstatus,
                 myrating = showrating.rating,
-                year= response.Year ?: "",
-                date = showdate.text.toString().ifBlank { null },
+                year = response.Year ?: "",
+                //date = showdate.text.toString().ifBlank { null },
                 notes = review.text?.toString()?.ifBlank { null }
             )
 
             lifecycleScope.launch {
-                val app = application as Application
-                app.database.showDao().insertshow(show)
+                try {
+                    val app = application as Application
+                    android.util.Log.d("Dowatch", "Before insert: ${show.title}")
 
-                val shows = app.database.showDao().getAllShows()
-                dialog.dismiss()
+                    app.database.showDao().insertshow(show)
 
-                closebtn.setOnClickListener {
+                    android.util.Log.d("Dowatch", "After insert: ${show.title}")
+                    Toast.makeText(
+                        this@details,
+                        "Added to Watchlist",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                     dialog.dismiss()
+
+                } catch (e: Exception) {
+                    android.util.Log.e("Dowatch", "Insert failed", e)
+
+                    Toast.makeText(
+                        this@details,
+                        "Failed to add show: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-                Toast.makeText(this@details, "Added to Watchlist", Toast.LENGTH_SHORT).show()
             }
         }
     }

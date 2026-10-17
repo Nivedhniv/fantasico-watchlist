@@ -112,8 +112,9 @@
                         android:layout_width="match_parent"
                         android:orientation="horizontal"
                         android:id="@+id/smalldetails"
-                        android:paddingStart="20dp"
+                        android:paddingStart="0dp"
                         android:paddingEnd="20dp"
+                        android:layout_marginBottom="10dp"
                         android:gravity="center_vertical"
                         android:layout_height="wrap_content">
                         <TextView
@@ -121,11 +122,12 @@
                             android:textSize="15sp"
                             android:id="@+id/year"
                             android:text="2020"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20sp"
+                            android:layout_marginEnd="10dp"/>
                         <View
                             android:layout_width="1dp"
                             android:layout_height="10dp"
-                            android:layout_marginStart="10dp"
                             android:background="?attr/colorOnBackground"/>
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -134,8 +136,6 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:scaleX="0.8"
-                                android:scaleY="0.8"
                                 android:layout_marginLeft="10dp"
                                 android:layout_marginRight="5dp"
                                 android:background="@drawable/baseline_star_24" />
@@ -147,15 +147,11 @@
                                 android:text="7"
                                 android:layout_height="wrap_content"/>
                         </LinearLayout>
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="10dp"
-                            android:layout_margin="20dp"
-                            android:background="?attr/colorOnBackground"/>
                         <HorizontalScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:scrollbars="none"
+                            android:layout_marginStart="10dp"
                             android:orientation="horizontal" >
                             <LinearLayout
                                 android:layout_width="wrap_content"

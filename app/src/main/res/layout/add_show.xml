@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:background="@color/transparent"
-    android:padding="10dp"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/card"
         android:backgroundTint="?attr/colorOnSurfaceInverse"
         android:elevation="8dp"
@@ -46,7 +45,7 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="460dp"
+                android:layout_height="match_parent"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:scrollbars="none">
@@ -56,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center"
-                    android:paddingBottom="20dp">
+                    android:paddingBottom="100dp">
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/imagePicker"
@@ -85,25 +84,51 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/titleform"
+                        android:textStyle="bold"
                         android:padding="10dp"
                         android:maxLines="3"
                         android:text="Show title"
                         android:textSize="20dp"
                         android:gravity="center">
                     </TextView>
-                        <com.google.android.material.textfield.TextInputLayout
+
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/statusGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:singleSelection="true"
+                        app:selectionRequired="true">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnWatching"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="0dp"
-                            android:hint="Select Status"
-                            style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu">
-                            <AutoCompleteTextView
-                                android:id="@+id/status"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:inputType="none">
-                            </AutoCompleteTextView>
-                        </com.google.android.material.textfield.TextInputLayout>
+                            android:text="Currently Watching" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnCompleted"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Completed" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTowatch"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Plan to Watch" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnOnHold"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="On Hold" />
+
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
                     <LinearLayout
                         android:id="@+id/ratingSection"
                         android:layout_width="match_parent"
@@ -131,25 +156,6 @@
 
                     </LinearLayout>
 
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/datearea"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Show will Air on">
-
-                            <EditText
-                                android:id="@+id/date"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="none"
-                                android:focusable="false"
-                                android:clickable="true"
-                                android:cursorVisible="false"
-                                android:layout_marginBottom="20dp" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -160,26 +166,33 @@
                             android:layout_width="match_parent"
                             android:id="@+id/review"
                             android:layout_height="120dp"
-                            android:layout_marginBottom="20dp"
                             android:gravity="top|start"
                             android:inputType="textMultiLine"
                             android:scrollbars="vertical">
                         </com.google.android.material.textfield.TextInputEditText>
                         </com.google.android.material.textfield.TextInputLayout>
+
+
                 </LinearLayout>
-
-
             </ScrollView>
-
-        <Button
-            android:id="@+id/Addmovie"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimary"
-            android:layout_margin="20dp"
-            android:layout_gravity="end"
-            android:padding="10dp"
-            android:text="Add Show"
-            />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="-80dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/toptobtmgradient"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/Addmovie"
+                android:layout_width="150dp"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimary"
+                android:layout_gravity="end|center_horizontal"
+                android:layout_marginRight="30dp"
+                android:padding="10dp"
+                android:text="Add Show"
+                />
+        </FrameLayout>
         </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
