@@ -408,12 +408,26 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/completed"
                     android:text="Completed" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Drop" />
+                    android:id="@+id/later"
+                    android:text="Watch later" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Drop"
+                    android:text="Dropped" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:id="@+id/delete"
+                    android:layout_height="wrap_content"
+                    android:text="Delete" />
 
             </LinearLayout>
 

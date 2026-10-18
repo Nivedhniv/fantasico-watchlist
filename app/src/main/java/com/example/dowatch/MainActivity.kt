@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity()
             val upcoming=findViewById<LinearLayout>(R.id.upcoming)
             val planning=findViewById<LinearLayout>(R.id.planwatch)
             val completed=findViewById<LinearLayout>(R.id.completed)
+            val dropped=findViewById<LinearLayout>(R.id.dropped)
 
             val app = application as Application
             val shows = app.database.showDao().getAllShows()
@@ -93,6 +94,7 @@ class MainActivity : AppCompatActivity()
             upcoming.removeAllViews()
             planning.removeAllViews()
             completed.removeAllViews()
+            dropped.removeAllViews()
 
             shows.forEach { show ->
 
@@ -145,6 +147,7 @@ class MainActivity : AppCompatActivity()
                     "Upcoming" -> upcoming.addView(card)
                     "Plan To Watch" -> planning.addView(card)
                     "Completed" -> completed.addView(card)
+                    "Dropped" -> dropped.addView(card)
                 }
             }
             val count = app.database.showDao().getShowCount()

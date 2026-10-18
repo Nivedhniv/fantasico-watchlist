@@ -3,12 +3,9 @@ package com.example.dowatch
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.HorizontalScrollView
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.RatingBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,15 +13,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.google.android.material.snackbar.Snackbar
-import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.launch
 import kotlin.collections.forEach
 import android.widget.Button
 import androidx.core.view.isVisible
 import android.util.Log
 import android.text.TextUtils
+import android.widget.Toast
 
 class usr_details : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +30,7 @@ class usr_details : AppCompatActivity() {
         val back = findViewById<ImageButton>(R.id.Back)
         val poster =
             findViewById<com.google.android.material.card.MaterialCardView>(R.id.posterCard)
-        val status=findViewById<Button>(R.id.status)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { _, insets ->
 
             val systemBars = insets.getInsets(
@@ -46,12 +41,6 @@ class usr_details : AppCompatActivity() {
         }
         back.setOnClickListener {
             finish()
-        }
-
-        val options=findViewById<LinearLayout>(R.id.options)
-
-        status.setOnClickListener {
-            options.isVisible = !options.isVisible
         }
 
         val loading = findViewById<FrameLayout>(R.id.loading)
@@ -73,12 +62,115 @@ class usr_details : AppCompatActivity() {
                 val mediaType = parts.getOrNull(0) ?: "movie"
                 val thirdpartyid = parts.getOrNull(1) ?: show.externalId
 
-                searchMoviedetail(thirdpartyid)
                 val success = searchMoviedetail(thirdpartyid, mediaType)
 
                 if (success) {
                     content.visibility = View.VISIBLE
                     loading.visibility = View.GONE
+                }
+
+                val status = findViewById<Button>(R.id.status)
+                status.text = show.status
+
+                val options = findViewById<LinearLayout>(R.id.options)
+                val complete = findViewById<Button>(R.id.completed)
+                val later = findViewById<Button>(R.id.later)
+                val drop = findViewById<Button>(R.id.Drop)
+                val delete = findViewById<Button>(R.id.delete)
+
+                if (show.status in listOf("Dropped", "Completed")) {
+                    drop.visibility = View.GONE
+                    later.visibility = View.GONE
+                    complete.visibility = View.GONE
+                }
+                status.setOnClickListener {
+                    options.isVisible = !options.isVisible
+                }
+                delete.setOnClickListener {
+                    lifecycleScope.launch {
+                        try {
+                            val app = application as Application
+                            app.database.showDao().delete(show.id)
+                            Toast.makeText(
+                                this@usr_details,
+                                "Deleted",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            finish()
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                this@usr_details,
+                                "Failed to delete: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+                complete.setOnClickListener {
+                    lifecycleScope.launch {
+                        try {
+                            val app = application as Application
+                            app.database.showDao().complete(show.id)
+                            status.text = "Completed"
+                            options.visibility= View.GONE
+                            Toast.makeText(
+                                this@usr_details,
+                                "Completed ${show.title}",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                this@usr_details,
+                                "Failed to update: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+                drop.setOnClickListener {
+                    lifecycleScope.launch {
+                        try {
+                            val app = application as Application
+                            app.database.showDao().dropped(show.id)
+                            status.text = "Dropped"
+                            options.visibility= View.GONE
+                            Toast.makeText(
+                                this@usr_details,
+                                "Dropped ${show.title}",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                this@usr_details,
+                                "Failed to Drop: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+                later.setOnClickListener {
+                    lifecycleScope.launch {
+                        try {
+                            val app = application as Application
+                            app.database.showDao().later(show.id)
+                            status.text = "Completed"
+                            options.visibility= View.GONE
+                            Toast.makeText(
+                                this@usr_details,
+                                "Plan To Watch ${show.title}",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                this@usr_details,
+                                "Failed to update Watch later: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
                 }
 
                 title.text = show.title
@@ -111,8 +203,6 @@ class usr_details : AppCompatActivity() {
             }
         }
     }
-
-
     private suspend fun searchMoviedetail(
         id: String,
         mediaType: String = "movie"
@@ -140,24 +230,41 @@ class usr_details : AppCompatActivity() {
             readMore.setOnClickListener {
                 expanded = !expanded
 
-                if (expanded) {
-                    about.maxLines = Int.MAX_VALUE
-                    about.ellipsize = null
-                    about.setPadding(
-                        about.paddingLeft,
-                        about.paddingTop,
-                        about.paddingRight,
-                        (40 * resources.displayMetrics.density).toInt()
-                    )
-                    readMore.text = "Click to collapse"
-                    readGrad.visibility = View.GONE
-                } else {
-                    about.maxLines = 5
-                    about.ellipsize = TextUtils.TruncateAt.END
+                about.animate()
+                    .alpha(0f)
+                    .setDuration(120)
+                    .withEndAction {
+                        if (expanded) {
+                            about.maxLines = Int.MAX_VALUE
+                            about.ellipsize = null
+                            about.setPadding(
+                                about.paddingLeft,
+                                about.paddingTop,
+                                about.paddingRight,
+                                (40 * resources.displayMetrics.density).toInt()
+                            )
+                            readMore.text = "Tap to collapse"
+                            readGrad.visibility = View.GONE
+                        } else {
+                            about.maxLines = 5
+                            about.ellipsize = TextUtils.TruncateAt.END
+                            readMore.text = "Tap to expand"
+                            readGrad.visibility = View.VISIBLE
+                            about.setPadding(
+                                about.paddingLeft,
+                                about.paddingTop,
+                                about.paddingRight,
+                                (20 * resources.displayMetrics.density).toInt()
+                            )
+                        }
 
-                    readMore.text = "Click to expand"
-                    readGrad.visibility = View.VISIBLE
-                }
+                        about.alpha = 0f
+                        about.animate()
+                            .alpha(1f)
+                            .setDuration(180)
+                            .start()
+                    }
+                    .start()
             }
 
             about.text = response.overview ?: "No description available."

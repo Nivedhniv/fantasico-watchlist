@@ -140,28 +140,43 @@ class details : AppCompatActivity() {
             val readMore = findViewById<TextView>(R.id.click)
             val readGrad = findViewById<View>(R.id.reveal)
             var expanded = false
-
             readMore.setOnClickListener {
                 expanded = !expanded
 
-                if (expanded) {
-                    about.maxLines = Int.MAX_VALUE
-                    about.ellipsize = null
-                    about.setPadding(
-                        about.paddingLeft,
-                        about.paddingTop,
-                        about.paddingRight,
-                        (40 * resources.displayMetrics.density).toInt()
-                    )
-                    readMore.text = "Click to collapse"
-                    readGrad.visibility = View.GONE
-                } else {
-                    about.maxLines = 5
-                    about.ellipsize = TextUtils.TruncateAt.END
-
-                    readMore.text = "Click to expand"
-                    readGrad.visibility = View.VISIBLE
-                }
+                about.animate()
+                    .alpha(0f)
+                    .setDuration(120)
+                    .withEndAction {
+                        if (expanded) {
+                            about.maxLines = Int.MAX_VALUE
+                            about.ellipsize = null
+                            about.setPadding(
+                                about.paddingLeft,
+                                about.paddingTop,
+                                about.paddingRight,
+                                (40 * resources.displayMetrics.density).toInt()
+                            )
+                            readMore.text = "Tap to collapse"
+                            readGrad.visibility = View.GONE
+                        } else {
+                            about.maxLines = 5
+                            about.ellipsize = TextUtils.TruncateAt.END
+                            readMore.text = "Tap to expand"
+                            readGrad.visibility = View.VISIBLE
+                            about.setPadding(
+                                about.paddingLeft,
+                                about.paddingTop,
+                                about.paddingRight,
+                                (20 * resources.displayMetrics.density).toInt()
+                            )
+                        }
+                        about.alpha = 0f
+                        about.animate()
+                            .alpha(1f)
+                            .setDuration(180)
+                            .start()
+                    }
+                    .start()
             }
             val genreContainer =
                 findViewById<LinearLayout>(R.id.genreContainer)

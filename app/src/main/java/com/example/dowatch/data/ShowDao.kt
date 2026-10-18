@@ -22,4 +22,13 @@ interface ShowDao{
 
     @Query("DELETE FROM Show WHERE id = :id")
     suspend fun delete(id: Int)
+
+    @Query("UPDATE Show SET status='Completed' WHERE id = :id")
+    suspend fun complete(id: Int)
+
+    @Query("UPDATE Show SET status='Plan To Watch' WHERE id = :id")
+    suspend fun later(id: Int)
+
+    @Query("UPDATE Show SET status='Dropped' WHERE id = :id")
+    suspend fun dropped(id: Int)
 }
