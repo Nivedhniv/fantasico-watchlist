@@ -24,7 +24,7 @@ import kotlin.collections.forEach
 import android.widget.Button
 import androidx.core.view.isVisible
 import android.util.Log
-import android.R.attr.id
+import android.text.TextUtils
 
 class usr_details : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +42,6 @@ class usr_details : AppCompatActivity() {
                 WindowInsetsCompat.Type.systemBars()
             )
             back.translationY = systemBars.top.toFloat()
-            poster.translationY = systemBars.top.toFloat()
             insets
         }
         back.setOnClickListener {
@@ -134,7 +133,35 @@ class usr_details : AppCompatActivity() {
                 findViewById<LinearLayout>(R.id.genreContainer)
             val about = findViewById<TextView>(R.id.about)
 
+            val readMore = findViewById<TextView>(R.id.click)
+            val readGrad = findViewById<View>(R.id.reveal)
+            var expanded = false
+
+            readMore.setOnClickListener {
+                expanded = !expanded
+
+                if (expanded) {
+                    about.maxLines = Int.MAX_VALUE
+                    about.ellipsize = null
+                    about.setPadding(
+                        about.paddingLeft,
+                        about.paddingTop,
+                        about.paddingRight,
+                        (40 * resources.displayMetrics.density).toInt()
+                    )
+                    readMore.text = "Click to collapse"
+                    readGrad.visibility = View.GONE
+                } else {
+                    about.maxLines = 5
+                    about.ellipsize = TextUtils.TruncateAt.END
+
+                    readMore.text = "Click to expand"
+                    readGrad.visibility = View.VISIBLE
+                }
+            }
+
             about.text = response.overview ?: "No description available."
+
 
             rating.text = response.vote_average?.let {
                 String.format(java.util.Locale.US, "%.1f", it)

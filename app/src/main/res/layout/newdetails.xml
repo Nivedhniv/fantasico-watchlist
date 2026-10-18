@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnSurfaceInverse"
+    tools:context=".Account">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/loading"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_gravity="center"
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:indeterminate="true"
+            android:visibility="visible"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:id="@+id/error"
+        android:padding="40dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="30dp"
+            android:background="@drawable/cardlight">
+            <ImageView
+                android:id="@+id/dochicksad"
+                android:layout_width="100dp"
+                android:layout_gravity="center"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/sad" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:textSize="15sp"
+                android:layout_gravity="center"
+                android:text="Could not find the movie"
+                android:layout_height="wrap_content"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+            <Button
+                android:layout_width="fill_parent"
+                android:text="Retry"
+                android:id="@+id/retry"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:layout_width="fill_parent"
+                android:text="Go Back"
+                android:id="@+id/goback"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/contentusrdet"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:scrollbars="none"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+
+                    <!-- Background artwork -->
+                    <ImageView
+                        android:id="@+id/header"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+
+                    <!-- Dark overlay -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#66000000" />
+
+                    <!-- Bottom gradient -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/gradient2" />
+
+                </FrameLayout>
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="start|top"
+                    android:id="@+id/posterCard"
+                    android:layout_marginTop="-150dp"
+                    android:layout_marginStart="20dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:id="@+id/poster"
+                        android:elevation="5dp" />
+                </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/title"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="25sp"
+                    android:textColor="?attr/colorPrimary"
+                    android:text="Movie title"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:id="@+id/smalldetails"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textSize="15sp"
+                        android:id="@+id/year"
+                        android:text="2020"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20sp"
+                        android:layout_marginEnd="10dp"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="10dp"
+                        android:background="?attr/colorOnBackground"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@drawable/baseline_star_24" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/rating"
+                            android:textSize="15sp"
+                            android:text="7"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none"
+                        android:layout_marginStart="10dp"
+                        android:orientation="horizontal" >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:id="@+id/genreContainer">
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/card_withborder"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingBottom="10dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:textSize="15sp"
+                        android:paddingStart="25dp"
+                        android:textStyle="bold"
+                        android:text="My Review"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="20dp"
+                        android:id="@+id/norating"
+                        android:visibility="gone"
+                        android:layout_marginBottom="30dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tap To add Review and Rating">
+                        </TextView>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rating_area"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:textSize="15sp"
+                            android:id="@+id/usr_review"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="23dp"
+                            android:paddingEnd="20dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:textSize="15sp"
+                                android:paddingStart="25dp"
+                                android:textStyle="bold"
+                                android:text="My Rating"
+                                android:layout_height="wrap_content"
+                                android:padding="10dp"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_marginRight="5dp"
+                                    android:background="@drawable/baseline_star_24" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:id="@+id/myrating"
+                                    android:textSize="15sp"
+                                    android:text="7"
+                                    android:layout_height="wrap_content"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:textSize="15sp"
+                        android:paddingStart="25dp"
+                        android:paddingBottom="10dp"
+                        android:text="About"
+                        android:textStyle="bold"
+                        android:layout_height="wrap_content" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/aboutcontainer"
+                        android:orientation="vertical"
+                        android:layout_marginRight="20dp"
+                        android:background="@drawable/cardlight"
+                        android:layout_height="wrap_content">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:textSize="15sp"
+                                android:paddingStart="20dp"
+                                android:maxLines="5"
+                                android:ellipsize="end"
+                                android:paddingTop="20dp"
+                                android:paddingEnd="20dp"
+                                android:paddingBottom="20dp"
+                                android:id="@+id/about"
+                                android:layout_height="wrap_content"
+                                />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp"
+                                android:id="@+id/reveal"
+                                android:layout_gravity="bottom"
+                                android:background="@drawable/cardgrad"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Click to expand"
+                                android:id="@+id/click"
+                                android:paddingBottom="10dp"
+                                android:layout_gravity="bottom|center"/>
+                        </FrameLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:textSize="15sp"
+                    android:paddingTop="10dp"
+                    android:paddingStart="25dp"
+                    android:paddingBottom="10dp"
+                    android:textStyle="bold"
+                    android:text="Cast"
+                    android:layout_height="wrap_content" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:background="@drawable/cardlight"
+                    android:padding="10dp"
+                    android:paddingStart="0dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:id="@+id/castContainer"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:textSize="15sp"
+                    android:paddingTop="10dp"
+                    android:paddingStart="25dp"
+                    android:paddingBottom="10dp"
+                    android:textStyle="bold"
+                    android:text="Crew"
+                    android:layout_height="wrap_content" />
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:background="@drawable/cardlight"
+                    android:padding="10dp"
+                    android:paddingStart="0dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="100dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:id="@+id/crewContainer"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+        </ScrollView>
+        <ImageButton
+            android:id="@+id/Back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top"
+            android:layout_margin="30dp"
+            android:contentDescription="back"
+            android:background="@color/transparent"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="top"
+            android:background="@drawable/gradient"/>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/toptobtmgradient"
+            android:paddingBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/contentusrdet">
+
+            <LinearLayout
+                android:id="@+id/options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="50dp"
+                android:gravity="end"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Completed" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Drop" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="20dp"
+                android:text="Currently Watching" />
+        </FrameLayout>
+
+</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
