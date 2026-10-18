@@ -26,6 +26,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import android.view.inputmethod.InputMethodManager
 import android.content.Intent
 import android.widget.FrameLayout
+import com.example.dowatch.TmdbSearchResponse
 import com.google.android.material.snackbar.Snackbar
 
 class Search : AppCompatActivity() {
@@ -93,16 +94,17 @@ class Search : AppCompatActivity() {
                     val suggestionContainer =
                         findViewById<LinearLayout>(R.id.suggestionContainer)
 
+
                     lifecycleScope.launch {
                         try {
-                            val response = RetrofitClient.api.searchMovies(
-                                BuildConfig.OMDB_API_KEY,
+                            val response = TmdbRetrofitClient.api.searchMovies(
                                 newText.trim()
                             )
 
                             suggestionContainer.removeAllViews()
 
-                            response.Search?.forEach { result ->
+                            response.results?.forEach { result ->
+                                val title = result.title ?: result.name ?: return@forEach
 
                                 val suggestion = layoutInflater.inflate(
                                     R.layout.sugestion,
@@ -111,18 +113,15 @@ class Search : AppCompatActivity() {
                                 )
 
                                 val name = suggestion.findViewById<TextView>(R.id.Name)
-                                name.text = result.Title
+                                name.text = title
 
                                 suggestion.setOnClickListener {
-                                    val selectedTitle = result.Title ?: return@setOnClickListener
-
-                                    searchEditText.setText(selectedTitle)
-                                    searchMovies(selectedTitle)
+                                    searchEditText.setText(title)
+                                    searchMovies(title)
                                 }
 
                                 suggestionContainer.addView(suggestion)
                             }
-
                         } catch (e: Exception) {
                             Log.e("SUGGESTION_ERROR", "Suggestion search failed", e)
 
@@ -142,29 +141,39 @@ class Search : AppCompatActivity() {
             finish()
         }
     }
+
     private fun searchMovies(query: String) {
-        val suggestions = findViewById<com.google.android.material.card.MaterialCardView>(R.id.searchSuggestions)
+        val suggestions =
+            findViewById<com.google.android.material.card.MaterialCardView>(
+                R.id.searchSuggestions
+            )
 
         suggestions.visibility = View.GONE
 
         lifecycleScope.launch {
-            val loading=findViewById<FrameLayout>(R.id.loading)
-            val resultarea=findViewById<ScrollView>(R.id.resultarea)
-            resultarea.visibility=View.GONE
-            loading.visibility= View.VISIBLE
-            try{
-                val response = RetrofitClient.api.searchMovies(
-                    BuildConfig.OMDB_API_KEY,
-                    query
-                )
+            val loading = findViewById<FrameLayout>(R.id.loading)
+            val resultarea = findViewById<ScrollView>(R.id.resultarea)
+            val resultsContainer = findViewById<GridLayout>(R.id.result)
 
-                val resultsContainer =
-                    findViewById<GridLayout>(R.id.result)
+            resultarea.visibility = View.GONE
+            loading.visibility = View.VISIBLE
+
+            try {
+                val movieResponse =
+                    TmdbRetrofitClient.api.searchMovies(query)
+
+                val tvResponse =
+                    TmdbRetrofitClient.api.searchTvShows(query)
 
                 resultsContainer.removeAllViews()
 
-                response.Search?.forEach { result ->
+                val movieResults = movieResponse.results.orEmpty()
+                    .map { it to "movie" }
 
+                val tvResults = tvResponse.results.orEmpty()
+                    .map { it to "tv" }
+
+                (movieResults + tvResults).forEach { (result, mediaType) ->
                     val movieCard = layoutInflater.inflate(
                         R.layout.result,
                         resultsContainer,
@@ -176,34 +185,50 @@ class Search : AppCompatActivity() {
 
                     val title =
                         movieCard.findViewById<TextView>(R.id.title)
-                    title.text = result.Title
+
+                    title.text = result.title
+                        ?: result.name
+                                ?: "Unknown title"
+
+                    val posterUrl = result.poster_path?.let {
+                        "https://image.tmdb.org/t/p/w500$it"
+                    }
 
                     Glide.with(this@Search)
-                        .load(result.Poster)
+                        .load(posterUrl)
                         .into(poster)
-                    loading.visibility= View.GONE
-                    resultarea.visibility=View.VISIBLE
+
                     resultsContainer.addView(movieCard)
 
                     movieCard.setOnClickListener {
-                        val intent = Intent(this@Search, details::class.java)
-                        intent.putExtra("id", result.imdbID)
-                        intent.putExtra("poster", result.Poster)
+                        val intent = Intent(
+                            this@Search,
+                            details::class.java
+                        )
+
+                        intent.putExtra("id", result.id.toString())
+                        intent.putExtra("poster", posterUrl)
+                        intent.putExtra("mediaType", mediaType)
+
                         startActivity(intent)
                     }
                 }
-            }
-            catch (e: Exception) {
-                Log.e("SEARCH_ERROR", "SEARCH FAILED", e)
 
-                loading.visibility = View.GONE
+                resultarea.visibility = View.VISIBLE
+
+            } catch (e: Exception) {
+                Log.e("SEARCH_ERROR", "TMDb search failed", e)
 
                 Snackbar.make(
                     findViewById(R.id.main),
                     "Unable to Connect",
                     Snackbar.LENGTH_SHORT
                 ).show()
+
+            } finally {
+                loading.visibility = View.GONE
             }
         }
     }
+
 }

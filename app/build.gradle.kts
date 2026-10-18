@@ -35,6 +35,12 @@ android {
             "OMDB_API_KEY",
             "\"${localProperties.getProperty("OMDB_API_KEY")}\""
         )
+
+        buildConfigField(
+            "String",
+            "TMDB_READ_ACCESS_TOKEN",
+            "\"${localProperties.getProperty("TMDB_READ_ACCESS_TOKEN")}\""
+        )
     }
 
     buildTypes {

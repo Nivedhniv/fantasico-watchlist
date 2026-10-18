@@ -250,15 +250,23 @@ class MainActivity : AppCompatActivity()
             true
         )
         val info=popupView.findViewById<LinearLayout>(R.id.info)
+        val intid=id.toInt()
         info.setOnClickListener {
             popupWindow.dismiss()
-            Log.d("Popup", "Show ID: $id")
-            val intid=id.toInt()
             val intent = Intent(this@MainActivity, usr_details::class.java)
             intent.putExtra("SHOW_ID", intid)
             startActivity(intent)
         }
         val delete=popupView.findViewById<LinearLayout>(R.id.delete)
+        delete.setOnClickListener {
+            popupWindow.dismiss()
+            lifecycleScope.launch {
+                val app = application as Application
+                app.database.showDao().delete(intid)
+                Toast.makeText(this@MainActivity,"Deleted Show",Toast.LENGTH_SHORT).show()
+                loadShows()
+            }
+        }
         popupWindow.elevation = 12f
         popupWindow.showAsDropDown(anchor,230,-250)
     }

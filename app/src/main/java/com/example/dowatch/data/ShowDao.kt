@@ -3,6 +3,7 @@ package com.example.dowatch.data
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import retrofit2.http.DELETE
 
 
 @Dao
@@ -18,4 +19,7 @@ interface ShowDao{
 
     @Query("SELECT COUNT(*) FROM Show")
     suspend fun getShowCount(): Int
+
+    @Query("DELETE FROM Show WHERE id = :id")
+    suspend fun delete(id: Int)
 }
