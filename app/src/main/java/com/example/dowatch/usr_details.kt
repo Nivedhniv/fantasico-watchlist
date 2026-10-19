@@ -6,7 +6,10 @@ import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Button
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -15,10 +18,10 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 import kotlin.collections.forEach
-import android.widget.Button
 import androidx.core.view.isVisible
 import android.util.Log
 import android.text.TextUtils
+import android.widget.RatingBar
 import android.widget.Toast
 
 class usr_details : AppCompatActivity() {
@@ -53,10 +56,168 @@ class usr_details : AppCompatActivity() {
             val show = app.database.showDao().getOne(showId)
 
             if (show != null) {
-                val title = findViewById<TextView>(R.id.title)
-                val year = findViewById<TextView>(R.id.year)
-                val usereview = findViewById<TextView>(R.id.usr_review)
-                val usrating = findViewById<TextView>(R.id.myrating)
+                val ratingBar = findViewById<RatingBar>(R.id.myrating)
+                val userReview = findViewById<TextView>(R.id.usereview)
+                val reviewSection =
+                    findViewById<com.google.android.material.textfield.TextInputLayout>(
+                        R.id.reviewsection
+                    )
+                val reviewInput =
+                    findViewById<com.google.android.material.textfield.TextInputEditText>(
+                        R.id.review
+                    )
+                val buttons = findViewById<LinearLayout>(R.id.upno)
+                val cancelButton = findViewById<Button>(R.id.cancelReview)
+                val updateButton = findViewById<Button>(R.id.updateReview)
+                val tapToEdit = findViewById<LinearLayout>(R.id.taptoedit)
+
+                // The values currently saved in Room.
+                var originalRating = show.myrating ?: 0f
+                var originalReview = show.notes.orEmpty()
+
+                var isEditing = false
+                var loadingSavedValues = false
+
+                fun displayReview() {
+                    userReview.text = originalReview
+
+                    if (isEditing) {
+                        // Editing mode
+                        userReview.visibility = View.GONE
+                        reviewSection.visibility = View.VISIBLE
+                        tapToEdit.visibility = View.GONE
+
+                        ratingBar.isEnabled = true
+                        reviewInput.isEnabled = true
+
+                        buttons.visibility = View.VISIBLE
+                        cancelButton.visibility = View.VISIBLE
+
+                    } else {
+                        // Normal viewing mode
+                        userReview.visibility =
+                            if (originalReview.isBlank()) View.GONE else View.VISIBLE
+
+                        reviewSection.visibility =
+                            if (originalReview.isBlank()) View.VISIBLE else View.GONE
+
+                        tapToEdit.visibility = View.VISIBLE
+                        ratingBar.isEnabled = false
+                        reviewInput.isEnabled = false
+
+                        buttons.visibility = View.GONE
+                    }
+
+                    ratingBar.rating = originalRating
+                    buttons.visibility = View.GONE
+                }
+
+                fun checkForChanges() {
+                    if (!isEditing || loadingSavedValues) return
+
+                    val ratingChanged = ratingBar.rating != originalRating
+                    val reviewChanged =
+                        reviewInput.text?.toString().orEmpty() != originalReview
+
+                    buttons.visibility = View.VISIBLE
+                    cancelButton.visibility = View.VISIBLE
+                    updateButton.visibility =
+                        if (ratingChanged || reviewChanged) View.VISIBLE else View.GONE
+                }
+
+                fun enterEditMode() {
+                    isEditing = true
+                    loadingSavedValues = true
+
+                    ratingBar.rating = originalRating
+                    reviewInput.setText(originalReview)
+
+                    displayReview()
+
+                    // Show the parent container and Cancel immediately
+                    buttons.visibility = View.VISIBLE
+                    cancelButton.visibility = View.VISIBLE
+                    updateButton.visibility = View.GONE
+
+                    loadingSavedValues = false
+                }
+
+                // Initial display.
+                displayReview()
+
+                // Tap the pencil hint to add or edit a review.
+                tapToEdit.setOnClickListener {
+                    enterEditMode()
+                }
+
+                ratingBar.setOnRatingBarChangeListener { _, _, _ ->
+                    checkForChanges()
+                }
+
+                reviewInput.addTextChangedListener(
+                    object : android.text.TextWatcher {
+                        override fun beforeTextChanged(
+                            s: CharSequence?, start: Int, count: Int, after: Int
+                        ) = Unit
+
+                        override fun onTextChanged(
+                            s: CharSequence?, start: Int, before: Int, count: Int
+                        ) {
+                            checkForChanges()
+                        }
+
+                        override fun afterTextChanged(s: android.text.Editable?) = Unit
+                    }
+                )
+
+                cancelButton.setOnClickListener {
+                    loadingSavedValues = true
+
+                    ratingBar.rating = originalRating
+                    reviewInput.setText(originalReview)
+
+                    isEditing = false
+                    displayReview()
+
+                    loadingSavedValues = false
+                }
+
+                updateButton.setOnClickListener {
+                    val updatedShow = show.copy(
+                        myrating = ratingBar.rating,
+                        notes = reviewInput.text
+                            ?.toString()
+                            ?.ifBlank { null }
+                    )
+
+                    lifecycleScope.launch {
+                        try {
+                            app.database.showDao().updateShow(updatedShow)
+
+                            // Establish the newly saved values as the baseline.
+                            originalRating = updatedShow.myrating ?: 0f
+                            originalReview = updatedShow.notes.orEmpty()
+
+                            isEditing = false
+                            displayReview()
+
+                            Toast.makeText(
+                                this@usr_details,
+                                "Review updated",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        } catch (e: Exception) {
+                            Log.e("Dowatch", "Review update failed", e)
+
+                            Toast.makeText(
+                                this@usr_details,
+                                "Couldn't update review",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                }
 
                 val parts = show.externalId.split("_", limit = 2)
                 val mediaType = parts.getOrNull(0) ?: "movie"
@@ -74,14 +235,28 @@ class usr_details : AppCompatActivity() {
 
                 val options = findViewById<LinearLayout>(R.id.options)
                 val complete = findViewById<Button>(R.id.completed)
+                val watching = findViewById<Button>(R.id.Watch)
                 val later = findViewById<Button>(R.id.later)
                 val drop = findViewById<Button>(R.id.Drop)
                 val delete = findViewById<Button>(R.id.delete)
 
-                if (show.status in listOf("Dropped", "Completed")) {
+                if (show.status in listOf("Upcoming")) {
                     drop.visibility = View.GONE
+                    drop.visibility=View.GONE
                     later.visibility = View.GONE
                     complete.visibility = View.GONE
+                }
+                if (show.status in listOf("Dropped", "Completed")) {
+                    drop.visibility = View.GONE
+                    watching.visibility=View.GONE
+                    later.visibility = View.GONE
+                    complete.visibility = View.GONE
+                }
+                if (show.status in listOf("Currently Watching")) {
+                    watching.visibility= View.GONE
+                }
+                if (show.status in listOf("Plan To Watch")) {
+                    later.visibility= View.GONE
                 }
                 status.setOnClickListener {
                     options.isVisible = !options.isVisible
@@ -106,6 +281,7 @@ class usr_details : AppCompatActivity() {
                         }
                     }
                 }
+
                 complete.setOnClickListener {
                     lifecycleScope.launch {
                         try {
@@ -135,6 +311,10 @@ class usr_details : AppCompatActivity() {
                             app.database.showDao().dropped(show.id)
                             status.text = "Dropped"
                             options.visibility= View.GONE
+                            drop.visibility=View.GONE
+                            watching.visibility=View.GONE
+                            later.visibility=View.GONE
+                            complete.visibility=View.GONE
                             Toast.makeText(
                                 this@usr_details,
                                 "Dropped ${show.title}",
@@ -145,6 +325,29 @@ class usr_details : AppCompatActivity() {
                             Toast.makeText(
                                 this@usr_details,
                                 "Failed to Drop: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+                watching.setOnClickListener {
+                    lifecycleScope.launch {
+                        try {
+                            val app = application as Application
+                            app.database.showDao().watching(show.id)
+                            status.text = "Currently Watching"
+                            options.visibility= View.GONE
+                            watching.visibility=View.GONE
+                            Toast.makeText(
+                                this@usr_details,
+                                "Watching ${show.title}",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                this@usr_details,
+                                "Failed to Watch: ${e.message}",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -170,21 +373,15 @@ class usr_details : AppCompatActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
                         }
+
                     }
                 }
 
+                val title=findViewById<TextView>(R.id.title)
+                val year=findViewById<TextView>(R.id.year)
                 title.text = show.title
                 year.text = show.year
 
-                val norate = findViewById<LinearLayout>(R.id.norating)
-                val yesrate = findViewById<LinearLayout>(R.id.rating_area)
-                if (show.notes != null && show.myrating != null) {
-                    usereview.text = show.notes
-                    usrating.text = "${show.myrating ?: "No rating"}"
-                } else {
-                    norate.visibility = View.VISIBLE
-                    yesrate.visibility = View.GONE
-                }
                 val retry = findViewById<Button>(R.id.retry)
                 val errormsg = findViewById<LinearLayout>(R.id.error)
                 retry.setOnClickListener {

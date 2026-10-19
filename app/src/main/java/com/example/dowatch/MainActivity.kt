@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.view.MotionEvent
-
+import androidx.core.view.isEmpty
 
 class MainActivity : AppCompatActivity()
 {
@@ -103,15 +103,15 @@ class MainActivity : AppCompatActivity()
                     null
                 )
                 card.setOnTouchListener { view, event ->
-                    when(event.action){
-                        MotionEvent.ACTION_DOWN->{
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
                             view.animate()
                                 .scaleX(0.96f)
                                 .scaleY(0.96f)
                                 .setDuration(150)
                                 .start()
                         }
-                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->{
+                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                             view.animate()
                                 .scaleX(1f)
                                 .scaleY(1f)
@@ -124,9 +124,10 @@ class MainActivity : AppCompatActivity()
                 val image = card.findViewById<ImageView>(R.id.img)
                 val title = card.findViewById<TextView>(R.id.title)
                 val year = card.findViewById<TextView>(R.id.yearposter)
-
+                val rating=card.findViewById<TextView>(R.id.usrrating)
                 title.text = show.title
                 year.text = show.year ?: ""
+                rating.text = ((show.myrating ?: 0f) * 2).toString()
 
                 Glide.with(this@MainActivity)
                     .load(show.posterurl)
@@ -150,6 +151,52 @@ class MainActivity : AppCompatActivity()
                     "Dropped" -> dropped.addView(card)
                 }
             }
+
+            val curtitle=findViewById<TextView>(R.id.one)
+            val upcomtitle=findViewById<TextView>(R.id.two)
+            val plantitle=findViewById<TextView>(R.id.three)
+            val comptitle=findViewById<TextView>(R.id.four)
+            val droptitle=findViewById<TextView>(R.id.five)
+
+            curtitle.visibility =
+                if (current.isEmpty()) View.GONE else View.VISIBLE
+
+            upcomtitle.visibility =
+                if (upcoming.isEmpty()) View.GONE else View.VISIBLE
+
+            plantitle.visibility =
+                if (planning.isEmpty()) View.GONE else View.VISIBLE
+
+            comptitle.visibility =
+                if (completed.isEmpty()) View.GONE else View.VISIBLE
+
+            droptitle.visibility =
+                if (dropped.isEmpty()) View.GONE else View.VISIBLE
+
+            current.visibility =
+                if (current.isEmpty()) View.GONE else View.VISIBLE
+
+            upcoming.visibility =
+                if (upcoming.isEmpty()) View.GONE else View.VISIBLE
+
+            planning.visibility =
+                if (planning.isEmpty()) View.GONE else View.VISIBLE
+
+            completed.visibility =
+                if (completed.isEmpty()) View.GONE else View.VISIBLE
+
+            dropped.visibility =
+                if (dropped.isEmpty()) View.GONE else View.VISIBLE
+
+            android.util.Log.d(
+                "Dowatch",
+                "Visibility: current=${current.visibility}, " +
+                        "upcoming=${upcoming.visibility}, " +
+                        "planning=${planning.visibility}, " +
+                        "completed=${completed.visibility}, " +
+                        "dropped=${dropped.visibility}"
+            )
+
             val count = app.database.showDao().getShowCount()
             val welcome=findViewById<LinearLayout>(R.id.welcome)
             val toppanel=findViewById<LinearLayout>(R.id.toppanel)

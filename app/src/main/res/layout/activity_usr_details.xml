@@ -191,73 +191,119 @@
                     android:layout_marginBottom="10dp"
                     android:paddingBottom="10dp"
                     android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:textSize="15sp"
-                        android:paddingStart="25dp"
-                        android:textStyle="bold"
-                        android:text="My Review"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"/>
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="20dp"
-                        android:id="@+id/norating"
-                        android:visibility="gone"
-                        android:layout_marginBottom="30dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
+                            android:textSize="15sp"
+                            android:paddingStart="20dp"
+                            android:textStyle="bold"
+                            android:text="My Review"
                             android:layout_height="wrap_content"
-                            android:text="Tap To add Review and Rating">
-                        </TextView>
+                            android:padding="10dp"/>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="20dp"
+                            android:clickable="true"
+                            android:id="@+id/taptoedit"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:paddingEnd="5dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/edit"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tap to edit"/>
+                        </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/rating_area"
-                        android:orientation="vertical">
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="0dp">
                         <TextView
-                            android:layout_width="match_parent"
-                            android:textSize="15sp"
-                            android:id="@+id/usr_review"
+                            android:layout_width="wrap_content"
+                            android:textStyle="bold"
                             android:layout_height="wrap_content"
-                            android:paddingStart="23dp"
-                            android:paddingEnd="20dp" />
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:text="Rating"/>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"/>
+                        <RatingBar
+                            android:id="@+id/myrating"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:textSize="15sp"
-                                android:paddingStart="25dp"
-                                android:textStyle="bold"
-                                android:text="My Rating"
-                                android:layout_height="wrap_content"
-                                android:padding="10dp"/>
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="5dp"
-                                    android:background="@drawable/baseline_star_24" />
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:id="@+id/myrating"
-                                    android:textSize="15sp"
-                                    android:text="7"
-                                    android:layout_height="wrap_content"/>
-                            </LinearLayout>
-                        </LinearLayout>
+                            android:numStars="5"
+                            android:stepSize="1"
+                            android:layout_margin="0dp"
+                            android:scaleX="0.85"
+                            android:scaleY="0.85" />
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/usereview"
+                        android:lineBreakStyle="normal"
+                        android:paddingBottom="10dp"
+                        android:visibility="gone"
+                        android:textSize="15dp"
+                        android:textColor="?attr/colorPrimary"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"/>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:id="@+id/reviewsection"
+                        android:hint="Add Show Review"
+                        android:layout_marginBottom="20dp">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:id="@+id/review"
+                            android:layout_height="wrap_content"
+                            android:gravity="top|start"
+                            android:inputType="textMultiLine"
+                            android:scrollbars="vertical">
+                        </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:visibility="gone"
+                        android:id="@+id/upno"
+                        android:paddingEnd="20dp"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/cancelReview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cancel" />
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"/>
+                        <Button
+                            android:id="@+id/updateReview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Update" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -404,7 +450,11 @@
                 android:gravity="end"
                 android:orientation="vertical"
                 android:visibility="gone">
-
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Watch"
+                    android:text="Watching" />
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

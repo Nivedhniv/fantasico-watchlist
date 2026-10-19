@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import retrofit2.http.DELETE
-
+import androidx.room.Update
 
 @Dao
 interface ShowDao{
@@ -31,4 +31,21 @@ interface ShowDao{
 
     @Query("UPDATE Show SET status='Dropped' WHERE id = :id")
     suspend fun dropped(id: Int)
+
+    @Query("UPDATE Show SET status='Currently Watching' WHERE id = :id")
+    suspend fun watching(id: Int)
+
+    @Query("""
+    SELECT * FROM Show
+    WHERE externalId = :externalId
+    LIMIT 1""")
+    suspend fun getShowByExternalId(
+        externalId: String
+    ): Show?
+
+    @Query("SELECT * FROM `Show` WHERE id = :id LIMIT 1")
+    suspend fun getShowById(id: Int): Show?
+
+    @Update
+    suspend fun updateShow(show: Show)
 }

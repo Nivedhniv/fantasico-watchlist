@@ -486,24 +486,15 @@ class details : AppCompatActivity() {
                 try {
                     val app = application as Application
 
-                    android.util.Log.d(
-                        "Dowatch",
-                        "Before insert: ${show.title}"
-                    )
-
                     app.database.showDao().insertshow(show)
-
-                    android.util.Log.d(
-                        "Dowatch",
-                        "After insert: ${show.title}"
-                    )
 
                     Toast.makeText(
                         this@details,
                         "Added to Watchlist",
                         Toast.LENGTH_SHORT
                     ).show()
-
+                    val addshow = findViewById<Button>(R.id.addbtn)
+                    addshow.visibility=View.GONE
                     dialog.dismiss()
 
                 } catch (e: Exception) {

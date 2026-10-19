@@ -201,16 +201,29 @@ class Search : AppCompatActivity() {
                     resultsContainer.addView(movieCard)
 
                     movieCard.setOnClickListener {
-                        val intent = Intent(
-                            this@Search,
-                            details::class.java
-                        )
+                        lifecycleScope.launch {
+                            val app = application as Application
 
-                        intent.putExtra("id", result.id.toString())
-                        intent.putExtra("poster", posterUrl)
-                        intent.putExtra("mediaType", mediaType)
+                            val savedShow = app.database.showDao()
+                                .getShowByExternalId("${mediaType}_${result.id}")
 
-                        startActivity(intent)
+                             val target = if (savedShow != null) {
+                                usr_details::class.java
+                            } else {
+                                details::class.java
+                            }
+
+                            val intent = Intent(this@Search, target).apply {
+                                putExtra("id", result.id.toString())
+                                putExtra("poster", posterUrl)
+
+                                if (savedShow != null) {
+                                    putExtra("SHOW_ID", savedShow.id)
+                                }
+                            }
+
+                            startActivity(intent)
+                        }
                     }
                 }
 

@@ -121,13 +121,6 @@
                             android:layout_height="wrap_content"
                             android:text="Plan to Watch" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnOnHold"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="On Hold" />
-
                     </com.google.android.material.button.MaterialButtonToggleGroup>
                     <LinearLayout
                         android:id="@+id/ratingSection"
