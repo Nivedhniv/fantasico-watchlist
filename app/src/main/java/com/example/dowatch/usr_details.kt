@@ -592,24 +592,22 @@ class usr_details : AppCompatActivity() {
                                 .into(personView.findViewById(R.id.peoplepic))
 
                             crewContainer.addView(personView)
-
-                            // After the cast and crew loops finish
-                            val castScroll = findViewById<HorizontalScrollView>(R.id.castScroll)
-                            val castTitle = findViewById<TextView>(R.id.castTitle)
-
-                            val crewScroll = findViewById<HorizontalScrollView>(R.id.crewScroll)
-                            val crewTitle = findViewById<TextView>(R.id.crewTitle)
-
-                            val hasCast = castContainer.childCount > 0
-                            val hasCrew = crewContainer.childCount > 0
-
-                            castScroll.visibility = if (hasCast) View.VISIBLE else View.GONE
-                            castTitle.visibility = if (hasCast) View.VISIBLE else View.GONE
-
-                            crewScroll.visibility = if (hasCrew) View.VISIBLE else View.GONE
-                            crewTitle.visibility = if (hasCrew) View.VISIBLE else View.GONE
                         }
+                // After the cast and crew loops finish
+                val castScroll = findViewById<HorizontalScrollView>(R.id.castScroll)
+                val castTitle = findViewById<TextView>(R.id.castTitle)
 
+                val crewScroll = findViewById<HorizontalScrollView>(R.id.crewScroll)
+                val crewTitle = findViewById<TextView>(R.id.crewTitle)
+
+                val hasCast = castContainer.childCount > 0
+                val hasCrew = crewContainer.childCount > 0
+
+                castScroll.visibility = if (hasCast) View.VISIBLE else View.GONE
+                castTitle.visibility = if (hasCast) View.VISIBLE else View.GONE
+
+                crewScroll.visibility = if (hasCrew) View.VISIBLE else View.GONE
+                crewTitle.visibility = if (hasCrew) View.VISIBLE else View.GONE
 
                 } catch (e: Exception) {
                     Log.e(

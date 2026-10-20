@@ -219,7 +219,7 @@ class Search : AppCompatActivity() {
                             val savedShow = app.database.showDao()
                                 .getShowByExternalId("${mediaType}_${result.id}")
 
-                             val target = if (savedShow != null) {
+                            val target = if (savedShow != null) {
                                 usr_details::class.java
                             } else {
                                 details::class.java
@@ -227,6 +227,7 @@ class Search : AppCompatActivity() {
 
                             val intent = Intent(this@Search, target).apply {
                                 putExtra("id", result.id.toString())
+                                putExtra("mediaType", mediaType)
                                 putExtra("poster", posterUrl)
 
                                 if (savedShow != null) {

@@ -25,6 +25,8 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.view.MotionEvent
 import androidx.core.view.isEmpty
+import java.io.File
+import android.net.Uri
 
 class MainActivity : AppCompatActivity()
 {
@@ -39,23 +41,42 @@ class MainActivity : AppCompatActivity()
         }
         updateGreeting()
         val btn=findViewById<ImageButton>(R.id.searchpage)
-        val acc=findViewById<ImageButton>(R.id.account)
+        val accountButton =
+            findViewById<com.google.android.material.imageview.ShapeableImageView>(
+                R.id.account
+            )
 
         btn.setOnClickListener {
             val intent= Intent(this, Search::class.java)
             startActivity(intent)
         }
-        acc.setOnClickListener {
+        accountButton.setOnClickListener {
             val intent= Intent(this, Account::class.java)
             startActivity(intent)
         }
-
-
-
     }
     override fun onResume() {
         super.onResume()
         loadShows()
+        updateGreeting()
+        updateProfileImage()
+    }
+    private fun updateProfileImage() {
+        val accountButton =
+            findViewById<com.google.android.material.imageview.ShapeableImageView>(
+                R.id.account
+            )
+
+        val imageFile = File(filesDir, "profile_picture.jpg")
+
+        if (imageFile.exists()) {
+            accountButton.setImageDrawable(null)
+            accountButton.setImageURI(Uri.fromFile(imageFile))
+        } else {
+            accountButton.setImageResource(
+                R.drawable.round_account_circle_24
+            )
+        }
     }
     fun updateGreeting() {
         val greet = findViewById<TextView>(R.id.greeting)

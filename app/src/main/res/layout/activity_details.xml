@@ -319,6 +319,7 @@
                 android:layout_height="48dp"
                 android:id="@+id/addbtn"
                 android:layout_margin="30dp"
+                android:hapticFeedbackEnabled="true"
                 android:text="Add To Watchlist"
                 android:contentDescription="watchlist add btn"
                 android:layout_gravity="bottom|end"

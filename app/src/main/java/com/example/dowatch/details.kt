@@ -35,6 +35,7 @@ import android.util.Log
 import com.google.android.material.button.MaterialButtonToggleGroup
 import android.R.attr.id
 import android.text.TextUtils
+import android.view.HapticFeedbackConstants
 
 class details : AppCompatActivity() {
     private var movieDetails: TmdbDetailsResponse? = null
@@ -93,7 +94,9 @@ class details : AppCompatActivity() {
         }
 
         val addshow = findViewById<Button>(R.id.addbtn)
-
+        addshow.performHapticFeedback(
+            HapticFeedbackConstants.VIRTUAL_KEY
+        )
         addshow.setOnClickListener {
             val movie = movieDetails ?: return@setOnClickListener
             val id = movie.id.toString()
@@ -303,6 +306,8 @@ class details : AppCompatActivity() {
 
                             Glide.with(this@details)
                                 .load(imageUrl)
+                                .placeholder(R.drawable.round_account_circle_24)
+                                .error(R.drawable.round_account_circle_24)
                                 .circleCrop()
                                 .into(personView.findViewById(R.id.peoplepic))
 
@@ -350,23 +355,21 @@ class details : AppCompatActivity() {
                                     .into(personView.findViewById(R.id.peoplepic))
 
                                 crewContainer.addView(personView)
-
-                                val castScroll = findViewById<HorizontalScrollView>(R.id.castScroll)
-                                val castTitle = findViewById<TextView>(R.id.castTitle)
-
-                                val crewScroll = findViewById<HorizontalScrollView>(R.id.crewScroll)
-                                val crewTitle = findViewById<TextView>(R.id.crewTitle)
-
-                                val hasCast = castContainer.childCount > 0
-                                val hasCrew = crewContainer.childCount > 0
-
-                                castScroll.visibility = if (hasCast) View.VISIBLE else View.GONE
-                                castTitle.visibility = if (hasCast) View.VISIBLE else View.GONE
-
-                                crewScroll.visibility = if (hasCrew) View.VISIBLE else View.GONE
-                                crewTitle.visibility = if (hasCrew) View.VISIBLE else View.GONE
-
                             }
+                        val castScroll = findViewById<HorizontalScrollView>(R.id.castScroll)
+                        val castTitle = findViewById<TextView>(R.id.castTitle)
+
+                        val crewScroll = findViewById<HorizontalScrollView>(R.id.crewScroll)
+                        val crewTitle = findViewById<TextView>(R.id.crewTitle)
+
+                        val hasCast = castContainer.childCount > 0
+                        val hasCrew = crewContainer.childCount > 0
+
+                        castScroll.visibility = if (hasCast) View.VISIBLE else View.GONE
+                        castTitle.visibility = if (hasCast) View.VISIBLE else View.GONE
+
+                        crewScroll.visibility = if (hasCrew) View.VISIBLE else View.GONE
+                        crewTitle.visibility = if (hasCrew) View.VISIBLE else View.GONE
 
                     } catch (e: Exception) {
                         Log.e(
