@@ -185,6 +185,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="vertical"
+                    android:elevation="8dp"
+                    android:id="@+id/reviewarea"
                     android:background="@drawable/card_withborder"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
@@ -306,11 +308,6 @@
                             android:text="Update" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
                     <TextView
                         android:layout_width="match_parent"
                         android:textSize="15sp"
@@ -322,9 +319,11 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_marginLeft="20dp"
+                        android:elevation="8dp"
                         android:id="@+id/aboutcontainer"
                         android:orientation="vertical"
                         android:layout_marginRight="20dp"
+                        android:layout_marginBottom="10dp"
                         android:background="@drawable/cardlight"
                         android:layout_height="wrap_content">
                         <FrameLayout
@@ -356,14 +355,13 @@
                                 android:paddingBottom="10dp"
                                 android:layout_gravity="bottom|center"/>
                         </FrameLayout>
-                    </LinearLayout>
                 </LinearLayout>
                 <TextView
                     android:layout_width="match_parent"
                     android:textSize="15sp"
-                    android:paddingTop="10dp"
                     android:paddingStart="25dp"
                     android:paddingBottom="10dp"
+                    android:id="@+id/castTitle"
                     android:textStyle="bold"
                     android:text="Cast"
                     android:layout_height="wrap_content" />
@@ -372,6 +370,8 @@
                     android:layout_width="match_parent"
                     android:background="@drawable/cardlight"
                     android:padding="10dp"
+                    android:elevation="8dp"
+                    android:id="@+id/castScroll"
                     android:paddingStart="0dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
@@ -390,6 +390,7 @@
                     android:textSize="15sp"
                     android:paddingTop="10dp"
                     android:paddingStart="25dp"
+                    android:id="@+id/crewTitle"
                     android:paddingBottom="10dp"
                     android:textStyle="bold"
                     android:text="Crew"
@@ -398,6 +399,8 @@
                     android:layout_width="match_parent"
                     android:background="@drawable/cardlight"
                     android:padding="10dp"
+                    android:id="@+id/crewScroll"
+                    android:elevation="8dp"
                     android:paddingStart="0dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="100dp"

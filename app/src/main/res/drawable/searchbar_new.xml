@@ -4,10 +4,11 @@
         android:color="?attr/colorSecondaryContainer">
     </solid>
     <stroke
-        android:width="0dp">
+        android:width="0.5dp"
+        android:color="?attr/colorOnSecondaryContainer">
 
     </stroke>
     <corners
-        android:radius="100sp">
+        android:radius="10sp">
     </corners>
 </shape>

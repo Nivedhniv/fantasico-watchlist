@@ -22,9 +22,12 @@ class Account : AppCompatActivity() {
         }
 
         val terms=findViewById<LinearLayout>(R.id.terms)
+        val help=findViewById<LinearLayout>(R.id.help)
         terms.setOnClickListener{
-            val intent= Intent(this, Terms::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Terms::class.java).putExtra(Terms.EXTRA_PAGE, Terms.PAGE_LEGAL))
+        }
+        help.setOnClickListener {
+            startActivity(Intent(this, Terms::class.java).putExtra(Terms.EXTRA_PAGE, Terms.PAGE_HELP))
         }
 
         val backbtn=findViewById<ImageButton>(R.id.Back)

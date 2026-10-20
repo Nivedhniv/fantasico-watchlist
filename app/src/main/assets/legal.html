@@ -11,7 +11,11 @@
         }
         * { box-sizing: border-box; }
         body {
-          margin-top: 60px; background: var(--bg); color: var(--fg);
+         -webkit-user-select: none;
+          user-select: none;
+          -webkit-touch-callout: none;
+          -webkit-tap-highlight-color: transparent;
+          margin-top: 80px; background: var(--bg); color: var(--fg);
           font: 16px/1.6 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         main { max-width: 720px ; margin: 0 auto; padding: 24px 16px 64px; }
@@ -22,8 +26,7 @@
         .meta, .effective { color: var(--muted); }
         .note { border-left: 3px solid var(--accent); padding: 4px 12px; margin: 16px 0; color: var(--muted); }
         nav { margin: 16px 0 0; }
-        nav a { color: var(--accent); margin-right: 16px; text-decoration: none; }
-        nav a:hover { text-decoration: underline; }
+        a { color: var(--accent); }
     </style>
 </head>
 <body>
@@ -54,7 +57,7 @@
         <p>The lists, notes, and ratings you create are yours and are stored on your device. I don't have access to them. Because there's no account or backup on my side, if you delete the App or lose your device, that data may be lost. Back it up yourself if it matters to you.</p>
 
         <h3>5. Third-party content</h3>
-        <p>Title details and posters shown in the App come from [Data Provider] and belong to their owners. They may be inaccurate or out of date. Movie and show names and images belong to their respective owners, and I'm not affiliated with them.</p>
+        <p>Title details and posters shown in the App come from TMDB and belong to their owners. They may be inaccurate or out of date. Movie and show names and images belong to their respective owners, and I'm not affiliated with them.</p>
 
         <h3>6. No guarantees</h3>
         <p>This is a personal project provided "as is". It may have bugs, change, or stop being updated. To the extent the law allows, I'm not liable for losses from using the App.</p>
@@ -63,10 +66,10 @@
         <p>I may update these Terms or the App. Continuing to use the App after an update means you accept the new Terms.</p>
 
         <h3>8. Governing law</h3>
-        <p>These Terms are governed by the laws of India. Courts in [City] have jurisdiction over any dispute.</p>
+        <p>These Terms are governed by the laws of India. Courts in every city have jurisdiction over any dispute.</p>
 
         <h3>9. Contact</h3>
-        <p>nivivx@gmail.com</p>
+        <p>Email me at <a href="mailto:nivivx@gmail.com?subject=DoWatch Help">nivivx@gmail.com</a> and I'll reply within 7 days.</p>
     </section>
 
     <section id="privacy">
@@ -82,7 +85,7 @@
         <p>Nothing. The App has no sign-up and doesn't ask for your name, email, phone number, location, contacts, or photos.</p>
 
         <h3>3. Third-party services</h3>
-        <p>To show title details and posters, the App requests data from TMDB. That request may reveal your IP address and the title you looked up to them, as with any internet connection. I don't send them anything that identifies you. Their own privacy policy applies to what they receive: <a href="[link]">[Data Provider] privacy policy</a>.</p>
+        <p>To show title details and posters, the App requests data from TMDB. That request may reveal your IP address and the title you looked up to them, as with any internet connection. I don't send them anything that identifies you. Their own privacy policy applies to what they receive: <a href="https://www.themoviedb.org/privacy-policy">TMDB privacy policy</a>.</p>
 
         <h3>4. Your device's permissions</h3>
         <p>The App asks only for the permissions it needs to work: 1) internet access. It doesn't use your camera, microphone, contacts, or location.</p>

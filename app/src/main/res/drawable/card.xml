@@ -3,12 +3,7 @@
 
     <corners android:radius="16dp" />
     <solid
-        android:color="?attr/colorOnSurfaceInverse">
+        android:color="?attr/colorPrimary">
 
     </solid>
-    <stroke
-        android:color="?attr/colorPrimary"
-        android:width="2dp">
-
-    </stroke>
 </shape>

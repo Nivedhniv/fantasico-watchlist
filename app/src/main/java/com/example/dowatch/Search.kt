@@ -83,6 +83,12 @@ class Search : AppCompatActivity() {
                 suggestions.visibility = View.GONE
 
                 searchMovies(query ?: "")
+                val imm = getSystemService(INPUT_METHOD_SERVICE)
+                        as android.view.inputmethod.InputMethodManager
+
+                imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+                searchEditText.clearFocus()
+
                 return true
             }
 
@@ -118,6 +124,12 @@ class Search : AppCompatActivity() {
                                 suggestion.setOnClickListener {
                                     searchEditText.setText(title)
                                     searchMovies(title)
+
+                                    val imm = getSystemService(INPUT_METHOD_SERVICE)
+                                            as android.view.inputmethod.InputMethodManager
+
+                                    imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+                                    searchEditText.clearFocus()
                                 }
 
                                 suggestionContainer.addView(suggestion)

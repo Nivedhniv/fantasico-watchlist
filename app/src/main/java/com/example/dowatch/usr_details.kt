@@ -23,6 +23,7 @@ import android.util.Log
 import android.text.TextUtils
 import android.widget.RatingBar
 import android.widget.Toast
+import android.widget.HorizontalScrollView
 
 class usr_details : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -144,7 +145,13 @@ class usr_details : AppCompatActivity() {
 
                 // Initial display.
                 displayReview()
+                val reviewArea = findViewById<LinearLayout>(R.id.reviewarea)
 
+                if (show.status == "Upcoming") {
+                    reviewArea.visibility = View.GONE
+                } else {
+                    reviewArea.visibility = View.VISIBLE
+                }
                 // Tap the pencil hint to add or edit a review.
                 tapToEdit.setOnClickListener {
                     enterEditMode()
@@ -243,6 +250,7 @@ class usr_details : AppCompatActivity() {
                 if (show.status in listOf("Upcoming")) {
                     drop.visibility = View.GONE
                     drop.visibility=View.GONE
+                    watching.visibility=View.GONE
                     later.visibility = View.GONE
                     complete.visibility = View.GONE
                 }
@@ -534,6 +542,8 @@ class usr_details : AppCompatActivity() {
 
                         Glide.with(this@usr_details)
                             .load(imageUrl)
+                            .placeholder(R.drawable.round_account_circle_24)
+                            .error(R.drawable.round_account_circle_24)
                             .circleCrop()
                             .into(personView.findViewById(R.id.peoplepic))
 
@@ -576,11 +586,30 @@ class usr_details : AppCompatActivity() {
 
                             Glide.with(this@usr_details)
                                 .load(imageUrl)
+                                .placeholder(R.drawable.round_account_circle_24)
+                                .error(R.drawable.round_account_circle_24)
                                 .circleCrop()
                                 .into(personView.findViewById(R.id.peoplepic))
 
                             crewContainer.addView(personView)
+
+                            // After the cast and crew loops finish
+                            val castScroll = findViewById<HorizontalScrollView>(R.id.castScroll)
+                            val castTitle = findViewById<TextView>(R.id.castTitle)
+
+                            val crewScroll = findViewById<HorizontalScrollView>(R.id.crewScroll)
+                            val crewTitle = findViewById<TextView>(R.id.crewTitle)
+
+                            val hasCast = castContainer.childCount > 0
+                            val hasCrew = crewContainer.childCount > 0
+
+                            castScroll.visibility = if (hasCast) View.VISIBLE else View.GONE
+                            castTitle.visibility = if (hasCast) View.VISIBLE else View.GONE
+
+                            crewScroll.visibility = if (hasCrew) View.VISIBLE else View.GONE
+                            crewTitle.visibility = if (hasCrew) View.VISIBLE else View.GONE
                         }
+
 
                 } catch (e: Exception) {
                     Log.e(
@@ -590,7 +619,6 @@ class usr_details : AppCompatActivity() {
                     )
 
                 }
-
             true
 
         } catch (e: Exception) {

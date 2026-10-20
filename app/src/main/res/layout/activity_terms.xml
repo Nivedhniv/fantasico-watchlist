@@ -16,26 +16,34 @@
         <LinearLayout
             android:id="@+id/toppanel"
             android:layout_width="match_parent"
-            android:outlineProvider="none"
             android:orientation="horizontal"
             android:layout_height="80dp"
+            android:layout_gravity="top"
+            app:cardCornerRadius="0dp"
+            android:background="@drawable/gradient">
+            </LinearLayout>
+        <ImageButton
+            android:id="@+id/Back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top"
+            android:padding="30dp"
+            android:background="@color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+
+
+        <LinearLayout
+            android:id="@+id/btmpanel"
+            android:layout_width="match_parent"
+            android:layout_height="83dp"
+            android:background="@drawable/gradient2"
+            android:orientation="horizontal"
+            android:outlineProvider="none"
+            android:layout_gravity="bottom"
             app:cardCornerRadius="0dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            android:background="@drawable/gradient2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <ImageButton
-                android:id="@+id/Back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start|top"
-                android:layout_margin="30dp"
-                android:background="@color/transparent"
-                android:layout_marginStart="16dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
-        </LinearLayout>
+            app:layout_constraintHorizontal_bias="0.0"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

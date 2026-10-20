@@ -97,12 +97,70 @@ class details : AppCompatActivity() {
         addshow.setOnClickListener {
             val movie = movieDetails ?: return@setOnClickListener
             val id = movie.id.toString()
-            Addshowsheet(id, mediaType)
+
+            val releaseDate = movie.release_date
+                ?.takeIf { it.isNotBlank() }
+                ?: movie.first_air_date
+                    ?.takeIf { it.isNotBlank() }
+
+            val isUpcoming = releaseDate?.let {
+                runCatching {
+                    java.time.LocalDate.parse(it)
+                        .isAfter(java.time.LocalDate.now())
+                }.getOrDefault(false)
+            } ?: false
+
+            if (isUpcoming) {
+                addUpcomingShow(movie,mediaType)
+            } else {
+                Addshowsheet(id, mediaType)
+            }
         }
 
     }
 
+    private fun addUpcomingShow(
+        movie: TmdbDetailsResponse,
+        mediaType: String
+    ) {
+        lifecycleScope.launch {
+            try {
+                val releaseDate = movie.release_date
+                    ?.takeIf { it.isNotBlank() }
+                    ?: movie.first_air_date
+                        ?.takeIf { it.isNotBlank() }
 
+                val show = Show(
+                    externalId = "${mediaType}_${movie.id}",
+                    title = movie.title ?: movie.name ?: "Unknown title",
+                    posterurl = movie.poster_path?.let {
+                        "https://image.tmdb.org/t/p/w500$it"
+                    } ?: "",
+                    status = "Upcoming",
+                    year = releaseDate?.take(4) ?: ""
+                )
+
+                val app = application as Application
+                app.database.showDao().insertshow(show)
+
+                Toast.makeText(
+                    this@details,
+                    "Added to Upcoming!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                val addshow = findViewById<Button>(R.id.addbtn)
+                addshow.visibility = View.GONE
+
+            } catch (e: Exception) {
+                android.util.Log.e("Dowatch", "Upcoming insert failed", e)
+                Toast.makeText(
+                    this@details,
+                    "Failed to add show: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
     private suspend fun searchMoviedetail(
         id: String,
         mediaType: String = "movie"
@@ -131,6 +189,7 @@ class details : AppCompatActivity() {
                 ?: response.first_air_date
                     ?.takeIf { it.isNotBlank() }
                         ?: "Year unavailable"
+
 
             rating.text = response.vote_average?.let {
                 String.format(java.util.Locale.US, "%.1f", it)
@@ -291,6 +350,22 @@ class details : AppCompatActivity() {
                                     .into(personView.findViewById(R.id.peoplepic))
 
                                 crewContainer.addView(personView)
+
+                                val castScroll = findViewById<HorizontalScrollView>(R.id.castScroll)
+                                val castTitle = findViewById<TextView>(R.id.castTitle)
+
+                                val crewScroll = findViewById<HorizontalScrollView>(R.id.crewScroll)
+                                val crewTitle = findViewById<TextView>(R.id.crewTitle)
+
+                                val hasCast = castContainer.childCount > 0
+                                val hasCrew = crewContainer.childCount > 0
+
+                                castScroll.visibility = if (hasCast) View.VISIBLE else View.GONE
+                                castTitle.visibility = if (hasCast) View.VISIBLE else View.GONE
+
+                                crewScroll.visibility = if (hasCrew) View.VISIBLE else View.GONE
+                                crewTitle.visibility = if (hasCrew) View.VISIBLE else View.GONE
+
                             }
 
                     } catch (e: Exception) {

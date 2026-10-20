@@ -26,12 +26,7 @@
         android:id="@+id/content"
         tools:layout_editor_absoluteX="-122dp"
         tools:layout_editor_absoluteY="32dp">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom"
-            android:background="@drawable/toptobtmgradient"/>
-    <ImageButton
+        <ImageButton
         android:id="@+id/Back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,47 +37,52 @@
         app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
 
         <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:id="@+id/materialCardView"
             android:layout_width="match_parent"
-            android:outlineProvider="none"
-            android:layout_height="80dp"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp"
-            android:layout_marginTop="70dp"
-            app:cardCornerRadius="0dp"
-            android:orientation="horizontal"
-            android:gravity="center|center_vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            android:outlineAmbientShadowColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+             <LinearLayout
+                android:id="@+id/materialCardView"
+                android:layout_width="match_parent"
+                android:outlineProvider="none"
+                android:layout_height="80dp"
+                android:layout_marginTop="70dp"
+                app:cardCornerRadius="0dp"
+                android:orientation="horizontal"
+                android:gravity="center|center_vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:outlineAmbientShadowColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.SearchView
+                <androidx.appcompat.widget.SearchView
                 android:id="@+id/Search"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/searchbar_new"
                 app:iconifiedByDefault="false"
                 app:queryHint="Search here" />
-        </LinearLayout>
+            </LinearLayout>
 
-        <ScrollView
-            android:id="@+id/resultarea"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <GridLayout
+            <ScrollView
+                android:id="@+id/resultarea"
                 android:layout_width="match_parent"
-                android:padding="5dp"
-                android:id="@+id/result"
-                android:layout_height="200dp"
-                android:columnCount="3"/>
-        </ScrollView>
-
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:paddingBottom="100dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:padding="5dp"
+                        android:id="@+id/result"
+                        android:layout_height="wrap_content"
+                        android:columnCount="3"/>
+                </LinearLayout>
+            </ScrollView>
     </LinearLayout>
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/searchSuggestions"
@@ -90,10 +90,10 @@
             android:background="?attr/colorSecondaryContainer"
             android:visibility="gone"
             android:layout_height="300dp"
+            android:elevation="8dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="145dp"
-            android:elevation="0dp"
             app:cardCornerRadius="16dp">
             <ScrollView
                 android:layout_width="match_parent"
@@ -113,5 +113,10 @@
                 android:layout_gravity="bottom"
                 android:background="@drawable/toptobtmgradient"/>
         </com.google.android.material.card.MaterialCardView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/toptobtmgradient"/>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>[App Name] - Help Center</title>
+    <style>
+        :root { --bg: #ffffff; --fg: #1d1d1f; --muted: #6b6b70; --line: #e3e3e6; --card: #f6f6f8; --accent: #3b5bdb; }
+        @media (prefers-color-scheme: dark) {
+          :root { --bg: #121214; --fg: #ececee; --muted: #9a9aa0; --line: #2a2a2e; --card: #1b1b1f; --accent: #8da2ff; }
+        }
+        * { box-sizing: border-box; }
+        body {
+         -webkit-user-select: none;
+          user-select: none;
+          -webkit-touch-callout: none;
+          -webkit-tap-highlight-color: transparent;
+          margin-top: 80px; background: var(--bg); color: var(--fg);
+          font: 16px/1.6 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        main { max-width: 720px; margin: 0 auto; padding: 24px 16px 64px; }
+        h1 { font-size: 1.7rem; margin: 0 0 4px; }
+        h2 { font-size: 1.1rem; margin: 32px 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+        .lead { color: var(--muted); margin: 0 0 8px; }
+        details { background: var(--card); border: 1px solid var(--line); border-radius: 10px; margin: 8px 0; }
+        summary { cursor: pointer; padding: 14px 16px; font-weight: 600; list-style: none; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: "+"; float: right; color: var(--muted); font-weight: 400; }
+        details[open] summary::after { content: "\2212"; }
+        details p, details ul, details ol { margin: 0; padding: 0 16px 14px; }
+        details ul, details ol { padding-left: 36px; }
+        a { color: var(--accent); }
+        .contact { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); }
+    </style>
+</head>
+<body>
+<main>
+
+    <h1>Help Center</h1>
+    <p class="lead">Answers to common questions about DoWatch. Tap a question to open it.</p>
+
+    <h2>Getting started</h2>
+
+    <details>
+        <summary>What is DoWatch?</summary>
+        <p>A watchlist app for keeping track of movies and shows you want to watch or have already watched. It doesn't stream or host any video, so you still watch on your usual apps.</p>
+    </details>
+
+    <details>
+        <summary>Do I need to create an account?</summary>
+        <p>No. There's no sign-up or login. Everything you add stays on your device.</p>
+    </details>
+
+    <details>
+        <summary>Is the app free?</summary>
+        <p>Yes, it's free with no ads</p>
+    </details>
+
+    <h2>Using your watchlist</h2>
+
+    <details>
+        <summary>How do I add a movie or show?</summary>
+        <ol>
+            <li>Search for the title.</li>
+            <li>Open it from the results.</li>
+            <li>Tap [Add to watchlist].</li>
+        </ol>
+    </details>
+
+    <details>
+        <summary>How to mark something I watched?</summary>
+        <p>Open the title in your watchlist and tap [Mark as watched]. It moves out of your "to watch" list.</p>
+    </details>
+
+    <details>
+        <summary>How do I remove a title?</summary>
+        <p>Long press The poster and tap Delete. This can't be undone, so you'd need to add it again.</p>
+    </details>
+
+    <details>
+        <summary>Can I add ratings or notes?</summary>
+        <p>Yes. Open a title to give it a rating or write a note. Both are saved on your device. Both can be edited or added any time</p>
+    </details>
+
+    <h2>Your data</h2>
+
+    <details>
+        <summary>Where is my data stored?</summary>
+        <p>Only on your phone. We don't have accounts or servers, so I can't see your lists.</p>
+    </details>
+
+    <details>
+        <summary>Will I lose my lists if I change phones or reinstall?</summary>
+        <p>Yes, most likely. Since nothing is saved online, uninstalling the app or losing your device can erase your lists. [If you add export or backup, describe where to find it here.]</p>
+    </details>
+
+    <details>
+        <summary>How do I delete all my data?</summary>
+        <p>Go to your phone's Settings, find [App Name] under Apps, and choose Clear storage. Uninstalling the app also removes everything.</p>
+    </details>
+
+    <h2>Problems</h2>
+
+    <details>
+        <summary>A poster is missing or a title's details are wrong.</summary>
+        <p>Title details and posters come from TMDB, so occasionally something is missing, outdated, or wrong. Check your internet connection and try again later. If a title keeps showing wrong details, tell me and I'll look into it.</p>
+    </details>
+
+    <details>
+        <summary>Do I need internet to use the app?</summary>
+        <p>You need internet connection to run the App, Searching for new titles and loading posters needs a stable internet connection.</p>
+    </details>
+
+    <details>
+        <summary>The app crashed or something isn't working.</summary>
+        <p>Try closing the app fully and reopening it, and make sure you have the latest version from the Play Store. If it keeps happening, email me with your phone model, Android version, and what you were doing when it happened.</p>
+    </details>
+
+    <h2>About</h2>
+
+    <details>
+        <summary>Can I watch movies and shows in the app?</summary>
+        <p>No. DoWatch only helps you keep track of what to watch. It doesn't stream any video.</p>
+    </details>
+
+    <details>
+        <summary>Where can I read the Terms and Privacy Policy?</summary>
+        <p>See the <a href="legal.html">Terms and Privacy page</a>.</p>
+    </details>
+
+    <div class="contact">
+        <h2 style="margin-top:0">Still need help?</h2>
+        <p>Email me at <a href="mailto:nivivx@gmail.com?subject=DoWatch Help">nivivx@gmail.com</a> and I'll reply within 7 days.</p>
+    </div>
+
+</main>
+</body>
+</html>

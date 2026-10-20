@@ -10,7 +10,6 @@
         android:layout_height="200dp"
         android:layout_marginLeft="10dp"
         app:cardCornerRadius="15sp"
-        app:cardElevation="@dimen/cardview_default_radius"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.628"
         app:layout_constraintStart_toStartOf="parent"
