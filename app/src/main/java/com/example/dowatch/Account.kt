@@ -19,6 +19,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import java.io.File
 import java.io.FileOutputStream
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import androidx.activity.addCallback
 
 class Account : AppCompatActivity() {
 
@@ -51,6 +54,8 @@ class Account : AppCompatActivity() {
                 R.id.profileImageCard
             )
 
+        updateDashboard()
+
         profileImageCard.setOnClickListener {
             imagePicker.launch("image/*")
         }
@@ -81,6 +86,7 @@ class Account : AppCompatActivity() {
 
         val cancelButton = findViewById<Button>(R.id.cancelReview)
         val updateButton = findViewById<Button>(R.id.updateReview)
+
 
         // Load saved username
         val nickname = prefs.getString("nickname", "") ?: ""
@@ -118,6 +124,15 @@ class Account : AppCompatActivity() {
             loadSelectedImage()
             editCard.visibility = View.VISIBLE
             overlay.visibility=View.VISIBLE
+
+            onBackPressedDispatcher.addCallback(this) {
+                if (editCard.visibility == View.VISIBLE) {
+                    editCard.visibility = View.GONE
+                    overlay.visibility = View.GONE
+                } else {
+                    finish()
+                }
+            }
         }
 
         // Pick a profile picture
@@ -170,11 +185,62 @@ class Account : AppCompatActivity() {
             editCard.visibility = View.GONE
             overlay.visibility=View.GONE
 
+            val imm = getSystemService(INPUT_METHOD_SERVICE)
+                    as android.view.inputmethod.InputMethodManager
+
+            imm.hideSoftInputFromWindow(usernameInput.windowToken, 0)
+            usernameInput.clearFocus()
+
             Toast.makeText(
                 this,
                 "Profile updated",
                 Toast.LENGTH_SHORT
             ).show()
+
+        }
+    }
+    override fun onResume() {
+        super.onResume()
+        updateDashboard()
+    }
+    private fun updateDashboard() {
+        lifecycleScope.launch {
+
+            val usrbadge=findViewById<TextView>(R.id.usrbadge)
+
+            val app = application as Application
+            val shows = app.database.showDao().getAllShows()
+
+            findViewById<TextView>(R.id.totalTitlesCount).text =
+                shows.size.toString()
+
+            findViewById<TextView>(R.id.watchingCount).text =
+                shows.count { it.status == "Currently Watching" }.toString()
+
+            findViewById<TextView>(R.id.completedCount).text =
+                shows.count { it.status == "Completed" }.toString()
+
+            findViewById<TextView>(R.id.planToWatchCount).text =
+                shows.count { it.status == "Plan To Watch" }.toString()
+
+            findViewById<TextView>(R.id.upcomingCount).text =
+                shows.count { it.status == "Upcoming" }.toString()
+
+            findViewById<TextView>(R.id.droppedCount).text =
+                shows.count { it.status == "Dropped" }.toString()
+
+            val total = shows.size
+
+            usrbadge.text = when {
+                total == 0 -> "Newbie"
+                total < 10 -> "Beginner"
+                total < 25 -> "Enthusiast"
+                total < 50 -> "Pro"
+                total < 75 -> "Expert"
+                total < 100 -> "Master"
+                else -> "Legend"
+            }
+
         }
     }
 

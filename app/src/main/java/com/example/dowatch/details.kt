@@ -51,7 +51,6 @@ class details : AppCompatActivity() {
             finish()
         }
 
-        val poster = findViewById<com.google.android.material.card.MaterialCardView>(R.id.posterCard)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { _, insets ->
 
