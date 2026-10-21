@@ -146,6 +146,14 @@ class MainActivity : AppCompatActivity()
                 val title = card.findViewById<TextView>(R.id.title)
                 val year = card.findViewById<TextView>(R.id.yearposter)
                 val rating=card.findViewById<TextView>(R.id.usrrating)
+                val ratingbtn=card.findViewById<com.google.android.material.card.MaterialCardView>(R.id.ratingbutton)
+
+                if (show.status == "Upcoming" || show.status == "Plan To Watch") {
+                    ratingbtn.visibility = View.GONE
+                } else {
+                    ratingbtn.visibility = View.VISIBLE
+                    rating.text = ((show.myrating ?: 0f) * 2).toString()
+                }
                 title.text = show.title
                 year.text = show.year ?: ""
                 rating.text = ((show.myrating ?: 0f) * 2).toString()
@@ -255,7 +263,11 @@ class MainActivity : AppCompatActivity()
                             prefs.edit()
                                 .putString("nickname", namestr)
                                 .apply()
+                            val imm = getSystemService(INPUT_METHOD_SERVICE)
+                                    as android.view.inputmethod.InputMethodManager
 
+                            imm.hideSoftInputFromWindow(name.windowToken, 0)
+                            name.clearFocus()
                             val message = "Hey $namestr Search for your favorite shows and to add into your watch list"
 
                             msg.text = ""

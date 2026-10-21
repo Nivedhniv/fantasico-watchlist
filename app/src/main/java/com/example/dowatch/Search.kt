@@ -1,206 +1,330 @@
 package com.example.dowatch
 
-import android.os.Bundle
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.widget.SearchView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
-import com.google.android.material.color.MaterialColors
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.view.View
-import android.widget.ScrollView
 import android.widget.LinearLayout
-import androidx.lifecycle.lifecycleScope
-import android.util.Log
-import android.widget.GridLayout
-import kotlinx.coroutines.launch
+import android.widget.ScrollView
 import android.widget.TextView
-import com.example.dowatch.BuildConfig
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import android.view.inputmethod.InputMethodManager
-import android.content.Intent
-import android.widget.FrameLayout
-import com.example.dowatch.TmdbSearchResponse
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.card.MaterialCardView
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.withTimeout
+import retrofit2.HttpException
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 class Search : AppCompatActivity() {
+
+    private lateinit var suggestions: MaterialCardView
+    private lateinit var searchTxt: SearchView
+    private lateinit var searchEditText: EditText
+    private lateinit var suggestionContainer: LinearLayout
+    private lateinit var loading: FrameLayout
+    private lateinit var resultArea: ScrollView
+    private lateinit var resultsContainer: GridLayout
+    private lateinit var mainView: View
+
+    private var suggestionJob: Job? = null
+    private var searchJob: Job? = null
+
+    private var latestSuggestionQuery = ""
+    private var latestSearchQuery = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
         setContentView(R.layout.activity_search)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+
+        mainView = findViewById(R.id.main)
+
+        ViewCompat.setOnApplyWindowInsetsListener(mainView) { view, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+            )
+            view.setPadding(
+                bars.left,
+                bars.top,
+                bars.right,
+                bars.bottom
+            )
             insets
         }
 
-        val suggestions = findViewById<com.google.android.material.card.MaterialCardView>(R.id.searchSuggestions)
-        val searchtxt = findViewById<SearchView>(R.id.Search)
-        val backbtn = findViewById<ImageButton>(R.id.Back)
-        val searchEditText = searchtxt.findViewById<EditText>(
+        suggestions = findViewById(R.id.searchSuggestions)
+        searchTxt = findViewById(R.id.Search)
+        suggestionContainer = findViewById(R.id.suggestionContainer)
+        loading = findViewById(R.id.loading)
+        resultArea = findViewById(R.id.resultarea)
+        resultsContainer = findViewById(R.id.result)
+        val backButton = findViewById<ImageButton>(R.id.Back)
+
+        searchEditText = searchTxt.findViewById(
             androidx.appcompat.R.id.search_src_text
         )
+
         searchEditText.background = null
         searchEditText.setPadding(0, 0, 0, 0)
 
-        val searchIcon = searchtxt.findViewById<ImageView>(
+        val searchIcon = searchTxt.findViewById<ImageView>(
             androidx.appcompat.R.id.search_mag_icon
         )
-        val closeIcon = searchtxt.findViewById<ImageView>(
+        val closeIcon = searchTxt.findViewById<ImageView>(
             androidx.appcompat.R.id.search_close_btn
         )
 
-        val color = MaterialColors.getColor(
-            searchtxt,
-            com.google.android.material.R.attr.colorOnSurfaceInverse
-        )
-
-        val colordark = MaterialColors.getColor(
-            searchtxt,
+        val textColor = MaterialColors.getColor(
+            searchTxt,
             com.google.android.material.R.attr.colorOnSurface
         )
 
-        closeIcon.setColorFilter(colordark)
-        searchIcon.setColorFilter(colordark)
+        searchIcon.setColorFilter(textColor)
+        closeIcon.setColorFilter(textColor)
+        searchEditText.setTextColor(textColor)
 
-        searchEditText.setTextColor(
-            MaterialColors.getColor(
-                searchtxt,
-                com.google.android.material.R.attr.colorOnSurface
-            )
-        )
-        //search actions
-        searchtxt.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            val loading=findViewById<FrameLayout>(R.id.loading)
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                suggestions.visibility = View.GONE
+        suggestions.visibility = View.GONE
+        loading.visibility = View.GONE
+        resultArea.visibility = View.GONE
 
-                searchMovies(query ?: "")
-                val imm = getSystemService(INPUT_METHOD_SERVICE)
-                        as android.view.inputmethod.InputMethodManager
+        backButton.setOnClickListener {
+            finish()
+        }
 
-                imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
-                searchEditText.clearFocus()
+        searchTxt.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
 
-                return true
-            }
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    val cleanQuery = query?.trim().orEmpty()
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText != null && newText.trim().length >= 3) {
-
-                    suggestions.visibility = View.VISIBLE
-
-                    val suggestionContainer =
-                        findViewById<LinearLayout>(R.id.suggestionContainer)
-
-
-                    lifecycleScope.launch {
-                        try {
-                            val response = TmdbRetrofitClient.api.searchMovies(
-                                newText.trim()
-                            )
-
-                            suggestionContainer.removeAllViews()
-
-                            response.results?.forEach { result ->
-                                val title = result.title ?: result.name ?: return@forEach
-
-                                val suggestion = layoutInflater.inflate(
-                                    R.layout.sugestion,
-                                    suggestionContainer,
-                                    false
-                                )
-
-                                val name = suggestion.findViewById<TextView>(R.id.Name)
-                                name.text = title
-
-                                suggestion.setOnClickListener {
-                                    searchEditText.setText(title)
-                                    searchMovies(title)
-
-                                    val imm = getSystemService(INPUT_METHOD_SERVICE)
-                                            as android.view.inputmethod.InputMethodManager
-
-                                    imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
-                                    searchEditText.clearFocus()
-                                }
-
-                                suggestionContainer.addView(suggestion)
-                            }
-                        } catch (e: Exception) {
-                            Log.e("SUGGESTION_ERROR", "Suggestion search failed", e)
-
-                            suggestionContainer.removeAllViews()
-                            suggestions.visibility = View.GONE
-                        }
+                    if (cleanQuery.isBlank()) {
+                        showMessage("Enter a title to search.")
+                        return true
                     }
+
+                    suggestionJob?.cancel()
+                    suggestions.visibility = View.GONE
+                    hideKeyboard()
+                    searchEditText.clearFocus()
+
+                    searchMovies(cleanQuery)
+                    return true
                 }
-                else {
+
+                override fun onQueryTextChange(
+                    newText: String?
+                ): Boolean {
+                    val query = newText?.trim().orEmpty()
+
+                    if (query.length < MIN_QUERY_LENGTH) {
+                        suggestionJob?.cancel()
+                        latestSuggestionQuery = query
+                        suggestionContainer.removeAllViews()
+                        suggestions.visibility = View.GONE
+                        return true
+                    }
+
+                    loadSuggestions(query)
+                    return true
+                }
+            }
+        )
+    }
+
+    private fun loadSuggestions(query: String) {
+        suggestionJob?.cancel()
+        latestSuggestionQuery = query
+
+        suggestionJob = lifecycleScope.launch {
+            // Avoid sending a request for every keystroke.
+            delay(SUGGESTION_DEBOUNCE_MS)
+
+            if (query != latestSuggestionQuery) return@launch
+
+            suggestions.visibility = View.VISIBLE
+            suggestionContainer.removeAllViews()
+
+            try {
+                val response = TmdbRetrofitClient.api.searchMovies(query)
+
+                // Ignore responses belonging to older queries.
+                if (query != latestSuggestionQuery) return@launch
+
+                val results = response.results.orEmpty()
+                    .filter { !it.title.isNullOrBlank() || !it.name.isNullOrBlank() }
+
+                if (results.isEmpty()) {
+                    suggestions.visibility = View.GONE
+                    return@launch
+                }
+
+                results.forEach { result ->
+                    val title = result.title
+                        ?: result.name
+                        ?: return@forEach
+
+                    val suggestion = layoutInflater.inflate(
+                        R.layout.sugestion,
+                        suggestionContainer,
+                        false
+                    )
+
+                    suggestion.findViewById<TextView>(
+                        R.id.Name
+                    ).text = title
+
+                    suggestion.setOnClickListener {
+                        searchEditText.setText(title)
+                        suggestions.visibility = View.GONE
+                        suggestionJob?.cancel()
+                        hideKeyboard()
+                        searchEditText.clearFocus()
+                        searchMovies(title)
+                    }
+
+                    suggestionContainer.addView(suggestion)
+                }
+
+                if (suggestionContainer.childCount == 0) {
                     suggestions.visibility = View.GONE
                 }
-                return true
-            }
-        })
 
-        backbtn.setOnClickListener {
-            finish()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.e(
+                    TAG_SUGGESTIONS,
+                    "Suggestion search failed for query: $query",
+                    e
+                )
+
+                if (query == latestSuggestionQuery) {
+                    suggestionContainer.removeAllViews()
+                    suggestions.visibility = View.GONE
+                    showConnectionMessage(e)
+                }
+            }
         }
     }
 
     private fun searchMovies(query: String) {
-        val suggestions =
-            findViewById<com.google.android.material.card.MaterialCardView>(
-                R.id.searchSuggestions
-            )
+        val cleanQuery = query.trim()
 
+        if (cleanQuery.isBlank()) {
+            showMessage("Enter a title to search.")
+            return
+        }
+
+        searchJob?.cancel()
+        suggestionJob?.cancel()
+
+        latestSearchQuery = cleanQuery
         suggestions.visibility = View.GONE
+        resultArea.visibility = View.GONE
+        resultsContainer.removeAllViews()
+        loading.visibility = View.VISIBLE
 
-        lifecycleScope.launch {
-            val loading = findViewById<FrameLayout>(R.id.loading)
-            val resultarea = findViewById<ScrollView>(R.id.resultarea)
-            val resultsContainer = findViewById<GridLayout>(R.id.result)
-
-            resultarea.visibility = View.GONE
-            loading.visibility = View.VISIBLE
-
+        searchJob = lifecycleScope.launch {
             try {
-                val movieResponse =
-                    TmdbRetrofitClient.api.searchMovies(query)
+                /*
+                 * Each endpoint is handled independently.
+                 * If one fails, the other can still provide results.
+                 */
+                // supervisorScope prevents one failed endpoint from cancelling
+                // the parent search coroutine and crashing the Activity.
+                val (movieResponse, tvResponse) = supervisorScope {
+                    val movieTask = async {
+                        TmdbRetrofitClient.api.searchMovies(cleanQuery)
+                    }
 
-                val tvResponse =
-                    TmdbRetrofitClient.api.searchTvShows(query)
+                    val tvTask = async {
+                        TmdbRetrofitClient.api.searchTvShows(cleanQuery)
+                    }
+
+                    val movies = try {
+                        movieTask.await()
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        Log.e(TAG_SEARCH, "Movie search failed for: $cleanQuery", e)
+                        null
+                    }
+
+                    val tvShows = try {
+                        tvTask.await()
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        Log.e(TAG_SEARCH, "TV search failed for: $cleanQuery", e)
+                        null
+                    }
+
+                    movies to tvShows
+                }
+
+                if (cleanQuery != latestSearchQuery) return@launch
+
+                if (movieResponse == null && tvResponse == null) {
+                    showMessage(
+                        "Couldn't connect to TMDb. Check your internet connection and try again."
+                    )
+                    return@launch
+                }
+
+                val combinedResults = buildList {
+                    movieResponse?.results.orEmpty().forEach {
+                        add(it to "movie")
+                    }
+                    tvResponse?.results.orEmpty().forEach {
+                        add(it to "tv")
+                    }
+                }
 
                 resultsContainer.removeAllViews()
 
-                val movieResults = movieResponse.results.orEmpty()
-                    .map { it to "movie" }
+                combinedResults.forEach { (result, mediaType) ->
+                    val title = result.title
+                        ?: result.name
+                        ?: return@forEach
 
-                val tvResults = tvResponse.results.orEmpty()
-                    .map { it to "tv" }
-
-                (movieResults + tvResults).forEach { (result, mediaType) ->
                     val movieCard = layoutInflater.inflate(
                         R.layout.result,
                         resultsContainer,
                         false
                     )
 
-                    val poster =
-                        movieCard.findViewById<ImageView>(R.id.poster)
+                    val poster = movieCard.findViewById<ImageView>(
+                        R.id.poster
+                    )
+                    val titleView = movieCard.findViewById<TextView>(
+                        R.id.title
+                    )
 
-                    val title =
-                        movieCard.findViewById<TextView>(R.id.title)
-
-                    title.text = result.title
-                        ?: result.name
-                                ?: "Unknown title"
+                    titleView.text = title
 
                     val posterUrl = result.poster_path?.let {
                         "https://image.tmdb.org/t/p/w500$it"
@@ -214,47 +338,148 @@ class Search : AppCompatActivity() {
 
                     movieCard.setOnClickListener {
                         lifecycleScope.launch {
-                            val app = application as Application
-
-                            val savedShow = app.database.showDao()
-                                .getShowByExternalId("${mediaType}_${result.id}")
-
-                            val target = if (savedShow != null) {
-                                usr_details::class.java
-                            } else {
-                                details::class.java
-                            }
-
-                            val intent = Intent(this@Search, target).apply {
-                                putExtra("id", result.id.toString())
-                                putExtra("mediaType", mediaType)
-                                putExtra("poster", posterUrl)
-
-                                if (savedShow != null) {
-                                    putExtra("SHOW_ID", savedShow.id)
-                                }
-                            }
-
-                            startActivity(intent)
+                            openDetails(
+                                result.id,
+                                mediaType,
+                                posterUrl
+                            )
                         }
                     }
                 }
 
-                resultarea.visibility = View.VISIBLE
+                if (resultsContainer.childCount == 0) {
+                    showMessage("No matching titles found.")
+                } else {
+                    resultArea.visibility = View.VISIBLE
 
+                    if (movieResponse == null || tvResponse == null) {
+                        showMessage(
+                            "Some results couldn't be loaded. Showing available titles."
+                        )
+                    }
+                }
+
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                Log.e("SEARCH_ERROR", "TMDb search failed", e)
-
-                Snackbar.make(
-                    findViewById(R.id.main),
-                    "Unable to Connect",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-
+                Log.e(
+                    TAG_SEARCH,
+                    "Search failed for query: $cleanQuery",
+                    e
+                )
+                showConnectionMessage(e)
             } finally {
-                loading.visibility = View.GONE
+                // A cancelled older search must not hide a newer search's loader.
+                if (cleanQuery == latestSearchQuery) {
+                    loading.visibility = View.GONE
+                }
             }
         }
     }
 
+    private suspend fun openDetails(
+        externalId: Int,
+        mediaType: String,
+        posterUrl: String?
+    ) {
+        try {
+            val app = application as Application
+            val externalKey = "${mediaType}_$externalId"
+
+            val savedShow = app.database.showDao()
+                .getShowByExternalId(externalKey)
+
+            val target = if (savedShow != null) {
+                usr_details::class.java
+            } else {
+                details::class.java
+            }
+
+            val intent = Intent(this@Search, target).apply {
+                putExtra("id", externalId.toString())
+                putExtra("mediaType", mediaType)
+                putExtra("poster", posterUrl)
+
+                if (savedShow != null) {
+                    putExtra("SHOW_ID", savedShow.id)
+                }
+            }
+
+            startActivity(intent)
+
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.e(TAG_SEARCH, "Couldn't open title details", e)
+            showMessage("Couldn't open this title. Please try again.")
+        }
+    }
+
+    private fun showConnectionMessage(error: Throwable) {
+        val message = when (error) {
+            is SocketTimeoutException ->
+                "TMDb took too long to respond. Check your connection and retry."
+
+            is UnknownHostException ->
+                "Couldn't find TMDb. Check your internet or DNS settings."
+
+            is HttpException -> when (error.code()) {
+                401 -> "TMDb rejected the API credentials."
+                403 -> "TMDb access was denied."
+                429 -> "Too many requests. Please wait and retry."
+                in 500..599 -> "TMDb is temporarily unavailable."
+                else -> "TMDb returned an error (${error.code()})."
+            }
+
+            is IOException ->
+                "Network connection failed. Check your internet and retry."
+
+            else ->
+                "Something went wrong. Please try again."
+        }
+
+        if (!isFinishing && !isDestroyed) {
+            Snackbar.make(mainView, message, Snackbar.LENGTH_LONG)
+                .setAction("Retry") {
+                    val query = searchTxt.query?.toString()?.trim().orEmpty()
+                        .ifBlank { latestSearchQuery }
+                    if (query.isNotBlank()) {
+                        searchMovies(query)
+                    }
+                }
+                .show()
+        }
+    }
+
+    private fun showMessage(message: String) {
+        if (!isFinishing && !isDestroyed) {
+            Snackbar.make(
+                mainView,
+                message,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(
+            Context.INPUT_METHOD_SERVICE
+        ) as InputMethodManager
+
+        imm.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+    }
+
+    override fun onDestroy() {
+        suggestionJob?.cancel()
+        searchJob?.cancel()
+        super.onDestroy()
+    }
+
+    companion object {
+        private const val MIN_QUERY_LENGTH = 3
+        private const val SUGGESTION_DEBOUNCE_MS = 400L
+
+        private const val TAG_SEARCH = "SEARCH_ERROR"
+        private const val TAG_SUGGESTIONS = "SUGGESTION_ERROR"
+    }
 }

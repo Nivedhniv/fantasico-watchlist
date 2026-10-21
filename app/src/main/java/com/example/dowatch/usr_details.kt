@@ -297,6 +297,11 @@ class usr_details : AppCompatActivity() {
                             app.database.showDao().complete(show.id)
                             status.text = "Completed"
                             options.visibility= View.GONE
+                            drop.visibility=View.GONE
+                            watching.visibility=View.GONE
+                            later.visibility=View.GONE
+                            complete.visibility=View.GONE
+
                             Toast.makeText(
                                 this@usr_details,
                                 "Completed ${show.title}",
@@ -344,6 +349,7 @@ class usr_details : AppCompatActivity() {
                             val app = application as Application
                             app.database.showDao().watching(show.id)
                             status.text = "Currently Watching"
+                            later.visibility= View.VISIBLE
                             options.visibility= View.GONE
                             watching.visibility=View.GONE
                             Toast.makeText(
@@ -366,8 +372,10 @@ class usr_details : AppCompatActivity() {
                         try {
                             val app = application as Application
                             app.database.showDao().later(show.id)
-                            status.text = "Completed"
+                            status.text = "Plan To Watch"
                             options.visibility= View.GONE
+                            watching.visibility=View.VISIBLE
+                            later.visibility=View.GONE
                             Toast.makeText(
                                 this@usr_details,
                                 "Plan To Watch ${show.title}",
