@@ -24,6 +24,8 @@ import android.text.TextUtils
 import android.widget.RatingBar
 import android.widget.Toast
 import android.widget.HorizontalScrollView
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class usr_details : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -396,7 +398,22 @@ class usr_details : AppCompatActivity() {
                 val title=findViewById<TextView>(R.id.title)
                 val year=findViewById<TextView>(R.id.year)
                 title.text = show.title
-                year.text = show.year
+                year.text = show.year?.let {
+                    if (it.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
+                        try {
+                            SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                                .parse(it)
+                                ?.let { parsed ->
+                                    SimpleDateFormat("MMM dd, yyyy", Locale.US)
+                                        .format(parsed)
+                                } ?: it
+                        } catch (e: Exception) {
+                            it
+                        }
+                    } else {
+                        it
+                    }
+                } ?: "Year unavailable"
 
                 val retry = findViewById<Button>(R.id.retry)
                 val errormsg = findViewById<LinearLayout>(R.id.error)
@@ -456,12 +473,12 @@ class usr_details : AppCompatActivity() {
                                 about.paddingRight,
                                 (40 * resources.displayMetrics.density).toInt()
                             )
-                            readMore.text = "Tap to collapse"
+                            readMore.text = "Read Less"
                             readGrad.visibility = View.GONE
                         } else {
                             about.maxLines = 5
                             about.ellipsize = TextUtils.TruncateAt.END
-                            readMore.text = "Tap to expand"
+                            readMore.text = "Read More"
                             readGrad.visibility = View.VISIBLE
                             about.setPadding(
                                 about.paddingLeft,

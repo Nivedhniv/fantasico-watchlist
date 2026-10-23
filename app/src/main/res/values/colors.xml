@@ -4,6 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="cardbg">?attr/colorSurfaceInverse</color>
     <color name="purple">#D5C7FF</color>
-    <color name="transparent">#03D5C7FF</color>
+    <color name="transparent">#00000000</color>
     <color name="autodark">@color/material_dynamic_neutral_variant0</color>
 </resources>

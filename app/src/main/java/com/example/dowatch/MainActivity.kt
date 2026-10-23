@@ -152,11 +152,11 @@ class MainActivity : AppCompatActivity()
                     ratingbtn.visibility = View.GONE
                 } else {
                     ratingbtn.visibility = View.VISIBLE
-                    rating.text = ((show.myrating ?: 0f) * 2).toString()
+                    rating.text = ((show.myrating ?: 0f) * 2).toInt().toString()
                 }
                 title.text = show.title
                 year.text = show.year ?: ""
-                rating.text = ((show.myrating ?: 0f) * 2).toString()
+                rating.text = ((show.myrating ?: 0f) * 2).toInt().toString()
 
                 Glide.with(this@MainActivity)
                     .load(show.posterurl)

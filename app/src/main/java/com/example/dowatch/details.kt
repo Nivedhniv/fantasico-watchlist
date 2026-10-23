@@ -36,6 +36,8 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import android.R.attr.id
 import android.text.TextUtils
 import android.view.HapticFeedbackConstants
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class details : AppCompatActivity() {
     private var movieDetails: TmdbDetailsResponse? = null
@@ -186,11 +188,29 @@ class details : AppCompatActivity() {
 
             title.text = response.title ?: response.name ?: "Unknown title"
 
-            year.text = response.release_date
+            val date = response.release_date
                 ?.takeIf { it.isNotBlank() }
                 ?: response.first_air_date
                     ?.takeIf { it.isNotBlank() }
-                        ?: "Year unavailable"
+
+            year.text = when {
+                date == null -> "Year unavailable"
+
+                date.matches(Regex("\\d{4}-\\d{2}-\\d{2}")) -> {
+                    try {
+                        SimpleDateFormat("yyyy-MM-dd", Locale.US)
+                            .parse(date)
+                            ?.let {
+                                SimpleDateFormat("MMM dd, yyyy", Locale.US)
+                                    .format(it)
+                            } ?: date
+                    } catch (e: Exception) {
+                        date
+                    }
+                }
+
+                else -> date
+            }
 
 
             rating.text = response.vote_average?.let {

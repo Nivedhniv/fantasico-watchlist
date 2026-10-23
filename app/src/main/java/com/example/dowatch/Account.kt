@@ -110,6 +110,13 @@ class Account : AppCompatActivity() {
             )
         }
 
+        val about=findViewById<LinearLayout>(R.id.about)
+        about.setOnClickListener {
+            startActivity(
+                Intent(this, About::class.java)
+            )
+        }
+
         backbtn.setOnClickListener {
             finish()
         }

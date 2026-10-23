@@ -37,32 +37,7 @@
             app:cardBackgroundColor="?attr/colorPrimaryInverse"
             app:cardCornerRadius="50dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/colorPrimary"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:id="@+id/usrrating"
-                    android:textColor="?attr/colorOnPrimary"
-                    android:text="5"
-                    android:textSize="15sp">
-
-                </TextView>
-
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginEnd="5dp"
-                    android:src="@drawable/baseline_star_24">
-
-                </ImageView>
-            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
@@ -79,17 +54,45 @@
 
         </TextView>
 
-        <TextView
-            android:id="@+id/yearposter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:textColor="?attr/colorSurfaceInverse"
-            android:layout_margin="10dp"
-            android:textSize="12sp"
-            android:text="2020"
-            android:textStyle="bold">
 
-        </TextView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/yearposter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorSurfaceInverse"
+                android:layout_margin="10dp"
+                android:textSize="12sp"
+                android:text="2020"
+                android:textStyle="bold"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/baseline_star_24">
+
+                </ImageView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/usrrating"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="?attr/colorSurfaceInverse"
+                    android:text="5"
+                    android:textSize="12sp">
+                </TextView>
+
+
+            </LinearLayout>
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
