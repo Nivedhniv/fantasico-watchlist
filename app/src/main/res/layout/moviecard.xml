@@ -28,18 +28,6 @@
 
         </ImageView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            android:id="@+id/ratingbutton"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:layout_margin="5dp"
-            app:cardBackgroundColor="?attr/colorPrimaryInverse"
-            app:cardCornerRadius="50dp">
-
-
-        </com.google.android.material.card.MaterialCardView>
-
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
@@ -73,10 +61,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
+                android:id="@+id/ratingbutton"
                 android:gravity="center_vertical">
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:paddingEnd="5dp"
                     android:src="@drawable/baseline_star_24">
 
                 </ImageView>

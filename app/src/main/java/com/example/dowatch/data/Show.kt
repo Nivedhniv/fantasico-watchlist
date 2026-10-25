@@ -14,6 +14,7 @@ data class Show(
     val posterurl: String,
     val status: String,
     val year: String,
+    val releaseDate:String? = null,
     val myrating: Float? = null,
     val date: String? = null,
     val notes: String? = null

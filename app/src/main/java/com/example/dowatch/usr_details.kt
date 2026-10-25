@@ -24,8 +24,10 @@ import android.text.TextUtils
 import android.widget.RatingBar
 import android.widget.Toast
 import android.widget.HorizontalScrollView
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.Date
 
 class usr_details : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +36,6 @@ class usr_details : AppCompatActivity() {
         setContentView(R.layout.activity_usr_details)
 
         val back = findViewById<ImageButton>(R.id.Back)
-        val poster =
-            findViewById<com.google.android.material.card.MaterialCardView>(R.id.posterCard)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { _, insets ->
 
@@ -248,11 +248,13 @@ class usr_details : AppCompatActivity() {
                 val later = findViewById<Button>(R.id.later)
                 val drop = findViewById<Button>(R.id.Drop)
                 val delete = findViewById<Button>(R.id.delete)
+                val ratingarea=findViewById<LinearLayout>(R.id.ratingarea)
 
                 if (show.status in listOf("Upcoming")) {
                     drop.visibility = View.GONE
                     drop.visibility=View.GONE
                     watching.visibility=View.GONE
+                    ratingarea.visibility=View.GONE
                     later.visibility = View.GONE
                     complete.visibility = View.GONE
                 }
@@ -396,24 +398,7 @@ class usr_details : AppCompatActivity() {
                 }
 
                 val title=findViewById<TextView>(R.id.title)
-                val year=findViewById<TextView>(R.id.year)
                 title.text = show.title
-                year.text = show.year?.let {
-                    if (it.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
-                        try {
-                            SimpleDateFormat("yyyy-MM-dd", Locale.US)
-                                .parse(it)
-                                ?.let { parsed ->
-                                    SimpleDateFormat("MMM dd, yyyy", Locale.US)
-                                        .format(parsed)
-                                } ?: it
-                        } catch (e: Exception) {
-                            it
-                        }
-                    } else {
-                        it
-                    }
-                } ?: "Year unavailable"
 
                 val retry = findViewById<Button>(R.id.retry)
                 val errormsg = findViewById<LinearLayout>(R.id.error)
@@ -499,6 +484,57 @@ class usr_details : AppCompatActivity() {
 
             about.text = response.overview ?: "No description available."
 
+            val date = response.release_date
+                ?.takeIf { it.isNotBlank() }
+                ?: response.first_air_date
+                    ?.takeIf { it.isNotBlank() }
+
+            val year=findViewById<TextView>(R.id.year)
+
+            val parsedDate = try {
+                if (date != null && date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
+                    SimpleDateFormat("yyyy-MM-dd", Locale.US).apply {
+                        isLenient = false
+                    }.parse(date)
+                } else {
+                    null
+                }
+            } catch (e: Exception) {
+                null
+            }
+
+            year.text = when {
+                date == null -> "Year unavailable"
+
+                parsedDate != null ->
+                    SimpleDateFormat("MMM dd, yyyy", Locale.US).format(parsedDate)
+
+                else -> date
+            }
+
+            val today = java.time.LocalDate.now()
+            val releaseDate = try {
+                date?.let { java.time.LocalDate.parse(it) }
+            } catch (e: Exception) {
+                null
+            }
+
+            val days = releaseDate?.let {
+                java.time.temporal.ChronoUnit.DAYS.between(today, it)
+            }
+
+            val releaseCountdown=findViewById<TextView>(R.id.releaseCountdown)
+            if (days != null && days >= 0) {
+                releaseCountdown.visibility = View.VISIBLE
+
+                releaseCountdown.text = when (days) {
+                    0L -> "Releasing today"
+                    1L -> "Releasing tomorrow"
+                    else -> "Releasing in $days days"
+                }
+            } else {
+                releaseCountdown.visibility = View.GONE
+            }
 
             rating.text = response.vote_average?.let {
                 String.format(java.util.Locale.US, "%.1f", it)

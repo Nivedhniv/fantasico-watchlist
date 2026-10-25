@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity()
                 val title = card.findViewById<TextView>(R.id.title)
                 val year = card.findViewById<TextView>(R.id.yearposter)
                 val rating=card.findViewById<TextView>(R.id.usrrating)
-                val ratingbtn=card.findViewById<com.google.android.material.card.MaterialCardView>(R.id.ratingbutton)
+                val ratingbtn=card.findViewById<LinearLayout>(R.id.ratingbutton)
 
                 if (show.status == "Upcoming" || show.status == "Plan To Watch") {
                     ratingbtn.visibility = View.GONE
@@ -217,14 +217,6 @@ class MainActivity : AppCompatActivity()
             dropped.visibility =
                 if (dropped.isEmpty()) View.GONE else View.VISIBLE
 
-            android.util.Log.d(
-                "Dowatch",
-                "Visibility: current=${current.visibility}, " +
-                        "upcoming=${upcoming.visibility}, " +
-                        "planning=${planning.visibility}, " +
-                        "completed=${completed.visibility}, " +
-                        "dropped=${dropped.visibility}"
-            )
 
             val count = app.database.showDao().getShowCount()
             val welcome=findViewById<LinearLayout>(R.id.welcome)

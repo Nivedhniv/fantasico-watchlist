@@ -72,8 +72,6 @@ class Account : AppCompatActivity() {
 
         val prefs = getSharedPreferences("DowatchPrefs", MODE_PRIVATE)
 
-        val terms = findViewById<LinearLayout>(R.id.terms)
-        val help = findViewById<LinearLayout>(R.id.help)
         val backbtn = findViewById<ImageButton>(R.id.Back)
         overlay = findViewById(R.id.overlay)
         editCard = findViewById(R.id.editcard)
@@ -96,19 +94,6 @@ class Account : AppCompatActivity() {
         // Load saved profile picture
         loadProfileImage()
 
-        terms.setOnClickListener {
-            startActivity(
-                Intent(this, Terms::class.java)
-                    .putExtra(Terms.EXTRA_PAGE, Terms.PAGE_LEGAL)
-            )
-        }
-
-        help.setOnClickListener {
-            startActivity(
-                Intent(this, Terms::class.java)
-                    .putExtra(Terms.EXTRA_PAGE, Terms.PAGE_HELP)
-            )
-        }
 
         val about=findViewById<LinearLayout>(R.id.about)
         about.setOnClickListener {

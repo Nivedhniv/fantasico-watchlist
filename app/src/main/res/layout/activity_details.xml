@@ -152,6 +152,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/ratingArea"
                         android:orientation="horizontal">
                         <ImageView
                             android:layout_width="20dp"
@@ -164,7 +165,6 @@
                             android:layout_gravity="center_vertical"
                             android:id="@+id/rating"
                             android:textSize="15sp"
-                            android:text="7"
                             android:layout_height="wrap_content"/>
                     </LinearLayout>
                     <HorizontalScrollView
@@ -181,7 +181,15 @@
                         </LinearLayout>
                     </HorizontalScrollView>
                 </LinearLayout>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:visibility="gone"
+                    android:textSize="15dp"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/releaseCountdown"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:textSize="15sp"
