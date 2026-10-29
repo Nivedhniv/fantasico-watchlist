@@ -1,8 +1,9 @@
 <p align="center">
-  <img src="Icon/Coloricon.png" alt="Dowatch icon" width="180">
+  <img src="Icon/newicon.png" alt="Dowatch icon" width="180">
 </p>
-
-# Dowatch
+<p>
+    <h1 align="center">DoWatch</h1>
+</p>
 
 **Your personal corner of the entertainment world.**
 
