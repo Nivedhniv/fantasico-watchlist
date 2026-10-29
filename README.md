@@ -1,4 +1,8 @@
-# 🐥 Dowatch
+<p align="center">
+  <img src="Icon/Coloricon.png" alt="Dowatch icon" width="180">
+</p>
+
+# Dowatch
 
 **Your personal corner of the entertainment world.**
 
