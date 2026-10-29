@@ -94,7 +94,7 @@ Suggestions, bug reports, and feedback are welcome. If you try Dowatch, feel fre
 
 ## 📄 License
 
-A licence has not yet been specified. Until one is added, please do not assume that the source code may be redistributed or reused under an open-source licence.
+Released under the [MIT License](LICENSE).
 
 ## 💗 Made With Care
 

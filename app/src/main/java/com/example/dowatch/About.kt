@@ -88,14 +88,6 @@ class About : AppCompatActivity() {
             )
             startActivity(intent)
         }
-
-        val clear=findViewById<LinearLayout>(R.id.clear)
-
-        clear.setOnClickListener {
-
-        }
-
-
     }
 
     private fun change() {
