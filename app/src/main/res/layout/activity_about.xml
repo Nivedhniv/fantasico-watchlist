@@ -58,7 +58,7 @@
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:lines="3"
+                                            android:lines="4"
                                             android:textColor="?attr/colorOnPrimaryContainer"
                                             android:text="Your Destination
                                              For a Centralised Watchlist Application "
@@ -314,7 +314,7 @@
 
         <ImageButton
             android:id="@+id/Back"
-            android:layout_width="19dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|top"
             android:layout_margin="30dp"

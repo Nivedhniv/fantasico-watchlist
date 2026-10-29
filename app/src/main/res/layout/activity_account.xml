@@ -390,7 +390,7 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:visibility="gone"
+                android:visibility="gone1"
                 android:id="@+id/editcard"
                 android:padding="20dp"
                 android:background="@drawable/cardlight"
@@ -419,7 +419,7 @@
                         android:layout_gravity="center"
                         android:textAlignment="center"
                         android:id="@+id/taptext"
-                        android:textColor="?attr/colorSurface"
+                        android:textColor="@color/white"
                         android:layout_height="wrap_content"
                         android:text="Tap to edit"/>
                 </com.google.android.material.card.MaterialCardView>

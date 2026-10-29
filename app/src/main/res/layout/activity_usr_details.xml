@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:textSize="15sp"
                 android:layout_gravity="center"
-                android:text="Could not find the movie"
+                android:text="Could not load the movie"
                 android:layout_height="wrap_content"/>
             <View
                 android:layout_width="match_parent"

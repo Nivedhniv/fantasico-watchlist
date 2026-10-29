@@ -8,6 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
         <LinearLayout
             android:layout_width="match_parent"
             android:padding="20dp"
@@ -34,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:lines="2"
-                    android:text="Our Very First Release, Welcome to DoWatch"/>
+                    android:text="Our Very First Release. Welcome to DoWatch!"/>
             </LinearLayout>
 
             <View
@@ -88,7 +91,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
-                                android:text="Movie, Shows and Anime in one page"/>
+                                android:text="Movies, Shows and Anime in One Place"/>
                         </LinearLayout>
                     </LinearLayout>
                 <LinearLayout
@@ -114,7 +117,7 @@
                             android:textSize="15dp"
                             android:textStyle="bold"
                             android:layout_gravity="center_vertical"
-                            android:text="Track what you have watched"/>
+                            android:text="Track What You Have Watched"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -146,13 +149,13 @@
                             android:textSize="15dp"
                             android:textStyle="bold"
                             android:layout_gravity="center_vertical"
-                            android:text="Darkmode"/>
+                            android:text="Dark Mode"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="New Dark mode adapt with your system"/>
+                            android:text="New Dark Mode Adapts to Your System"/>
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout
@@ -184,14 +187,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="Find Any Content You Want To Add"/>
+                            android:text="Find Any Content You Want To Add in Your Watchlist"/>
                     </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="20dp"
                     android:layout_height="wrap_content">
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -211,13 +214,77 @@
                             android:textSize="15dp"
                             android:textStyle="bold"
                             android:layout_gravity="center_vertical"
-                            android:text="Rating and Reviews"/>
+                            android:text="Ratings and Reviews"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="Rate Titles You Want, Edit Them Anytime"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:layout_height="wrap_content">
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:padding="10dp"
+                        android:backgroundTint="?attr/colorTertiaryContainer"
+                        android:background="@drawable/cardlight"
+                        android:src="@drawable/palette"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_vertical"
+                            android:text="Material You Colors"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Adapts to Your Wallpaper and Theme"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="20dp"
+                    android:layout_height="wrap_content">
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:padding="10dp"
+                        android:backgroundTint="?attr/colorSecondaryContainer"
+                        android:background="@drawable/cardlight"
+                        android:src="@drawable/predictive"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_vertical"
+                            android:text="Predictive Back Gestures"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Preview Where You’re Going Before You Swipe Back"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
