@@ -1,14 +1,12 @@
-<table>
-  <tr>
-    <td>
-      <img src="Icon/newicon.png" alt="DoWatch icon" width="120">
-    </td>
-    <td>
-      <h1>DoWatch</h1>
-      Your personal corner of the entertainment world.
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <img src="Icon/newicon.png" alt="Dowatch icon" width="180">
+</p>
+<p>
+    <h1 align="center">DoWatch</h1>
+</p>
+
+**Your personal corner of the entertainment world.**
+
 Dowatch is an Android watchlist application designed to help you organize the movies and TV shows you want to watch, are currently watching, or have already completed, all in one place.
 
 Discover titles, manage your watchlist, track your progress, and keep your personal ratings and reviews together in an interface designed to make browsing feel cinematic.
