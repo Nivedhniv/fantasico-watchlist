@@ -35,7 +35,7 @@
             android:layout_gravity="start|bottom"
             android:layout_margin="10dp"
             android:paddingBottom="20dp"
-            android:textColor="?attr/colorSurfaceInverse"
+            android:textColor="@color/white"
             android:text="This is title"
             android:textSize="15dp"
             android:textStyle="bold">
@@ -52,11 +52,10 @@
                 android:id="@+id/yearposter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/colorSurfaceInverse"
+                android:textColor="@color/white"
                 android:layout_margin="10dp"
                 android:textSize="12sp"
-                android:text="2020"
-                android:textStyle="bold"/>
+                android:text="2020"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -74,9 +73,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/usrrating"
-                    android:textStyle="bold"
                     android:layout_marginEnd="10dp"
-                    android:textColor="?attr/colorSurfaceInverse"
+                    android:textColor="@color/white"
                     android:text="5"
                     android:textSize="12sp">
                 </TextView>

@@ -2,6 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <gradient
         android:startColor="?attr/colorOnSurfaceInverse"
+
         android:endColor="#00000000"
         android:angle="90">
 

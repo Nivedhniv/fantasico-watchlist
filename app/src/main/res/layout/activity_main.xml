@@ -7,59 +7,65 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnSurfaceInverse"
     tools:context=".MainActivity">
+
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/toppanel"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:outlineProvider="none"
             android:layout_height="wrap_content"
+            android:outlineAmbientShadowColor="@color/black"
+            android:outlineProvider="none"
+            android:visibility="gone"
             app:cardCornerRadius="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            android:outlineAmbientShadowColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <TextView
                 android:id="@+id/greeting"
                 android:layout_width="150dp"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="?attr/colorPrimary"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="20dp"
-                android:text="@string/greetings">
-            </TextView>
+                android:text="@string/greetings"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold"></TextView>
+
             <View
-                android:layout_height="0dp"
                 android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_weight="1">
 
             </View>
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end|center"
                 android:layout_marginEnd="20dp"
-                app:cardCornerRadius="50dp"
-                android:layout_gravity="end|center">
+                app:cardCornerRadius="50dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="?attr/colorPrimary"
-                    android:layout_gravity="center_horizontal">
+                    android:layout_gravity="center_horizontal"
+                    android:background="?attr/colorPrimary">
+
                     <ImageButton
-                        android:layout_width="38dp"
                         android:id="@+id/searchpage"
-                        android:layout_margin="5dp"
-                        android:contentDescription="Search"
+                        android:layout_width="38dp"
                         android:layout_height="38dp"
-                        android:background="@drawable/search">
-                    </ImageButton>
+                        android:layout_margin="5dp"
+                        android:background="@drawable/search"
+                        android:contentDescription="Search"></ImageButton>
+
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/account"
                         android:layout_width="38dp"
@@ -67,237 +73,256 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="5dp"
                         android:contentDescription="Profile"
-                        android:src="@drawable/round_account_circle_24"
                         android:scaleType="centerCrop"
+                        android:src="@drawable/round_account_circle_24"
                         app:shapeAppearanceOverlay="@style/CircleImage" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
+
         <LinearLayout
+            android:id="@+id/welcome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/welcome"
+            android:orientation="vertical"
             android:padding="20dp"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:visibility="gone">
+
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:orientation="vertical"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="150dp"
-                android:padding="30dp"
-                android:layout_height="wrap_content">
+                android:orientation="vertical"
+                android:padding="30dp">
+
                 <TextView
-                    android:layout_width="200dp"
-                    android:layout_gravity="end"
-                    android:lines="3"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:textColor="?attr/colorOnPrimary"
                     android:id="@+id/msg"
-                    android:background="@drawable/chatbubble"/>
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:background="@drawable/chatbubble"
+                    android:lines="3"
+                    android:padding="10dp"
+                    android:textColor="?attr/colorOnPrimary" />
+
                 <ImageView
                     android:id="@+id/chip"
                     android:layout_width="70dp"
-                    android:layout_gravity="start"
                     android:layout_height="70dp"
+                    android:layout_gravity="start"
                     app:srcCompat="@drawable/waiting" />
+
                 <EditText
-                    android:layout_width="match_parent"
-                    android:padding="10dp"
                     android:id="@+id/name"
-                    android:textColor="?attr/colorOnPrimaryContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/cardlight"
                     android:hint="Name"
-                    android:layout_height="wrap_content"/>
+                    android:padding="10dp"
+                    android:textColor="?attr/colorOnPrimaryContainer" />
+
                 <Button
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="end"
                     android:id="@+id/nameok"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ok"/>
+                    android:layout_gravity="end"
+                    android:layout_marginTop="10dp"
+                    android:text="Ok" />
             </LinearLayout>
         </LinearLayout>
+
         <FrameLayout
-            android:layout_width="match_parent"
             android:id="@+id/loading"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ProgressBar
-                android:layout_gravity="center"
                 android:id="@+id/progressBar2"
-                android:visibility="visible"
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
-                android:indeterminate="true"
-                android:layout_height="wrap_content" />
-        </FrameLayout>
-        <ScrollView
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView"
-            app:layout_constraintVertical_bias="0.0">
-
-            <LinearLayout
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="0dp"
-                    android:textStyle="bold"
-                    android:id="@+id/one"
-                    android:textSize="15sp"
-                    android:textColor="?attr/colorPrimary"
-                    android:text="@string/watching">
-                </TextView>
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:visibility="visible" />
+        </FrameLayout>
 
-                <HorizontalScrollView
-                    android:layout_marginTop="10dp"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialCardView"
+                app:layout_constraintVertical_bias="0.0">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:scrollbars="none">
-                    <LinearLayout
+                    android:orientation="vertical">
+
+                    <include layout="@layout/new_releases" />
+
+                    <TextView
+                        android:id="@+id/one"
                         android:layout_width="wrap_content"
-                        android:layout_height="200dp"
-                        android:paddingEnd="50dp"
-                        android:id="@+id/current"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="0dp"
+                        android:text="@string/watching"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="15sp"
+                        android:textStyle="bold"></TextView>
 
-                    </LinearLayout>
-                </HorizontalScrollView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingStart="20dp"
-                    android:id="@+id/two"
-                    android:paddingEnd="0dp"
-                    android:textColor="?attr/colorPrimary"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:text="Upcoming">
-                </TextView>
-
-                <HorizontalScrollView
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:scrollbars="none">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:id="@+id/upcoming"
-                        android:paddingEnd="50dp"
-                        android:layout_height="200dp"
-                        android:orientation="horizontal">
-
-                    </LinearLayout>
-                </HorizontalScrollView>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="0dp"
-                    android:id="@+id/three"
-                    android:textColor="?attr/colorPrimary"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:text="@string/plan">
-                </TextView>
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:layout_marginTop="10dp">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="200dp"
-                        android:paddingEnd="50dp"
-                        android:id="@+id/planwatch"
-                        android:orientation="horizontal"
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
                         android:scrollbars="none">
 
-                    </LinearLayout>
-                </HorizontalScrollView>
+                        <LinearLayout
+                            android:id="@+id/current"
+                            android:layout_width="wrap_content"
+                            android:layout_height="200dp"
+                            android:orientation="horizontal"
+                            android:paddingEnd="50dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="0dp"
-                    android:textColor="?attr/colorPrimary"
-                    android:textStyle="bold"
-                    android:id="@+id/four"
-                    android:textSize="15sp"
-                    android:text="@string/completed">
-                </TextView>
+                        </LinearLayout>
+                    </HorizontalScrollView>
 
-                <HorizontalScrollView
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:scrollbars="none">
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/two"
                         android:layout_width="wrap_content"
-                        android:layout_height="200dp"
-                        android:paddingEnd="50dp"
-                        android:id="@+id/completed"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="0dp"
+                        android:text="Upcoming"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="15sp"
+                        android:textStyle="bold"></TextView>
 
-                    </LinearLayout>
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:scrollbars="none">
 
-                </HorizontalScrollView>
+                        <LinearLayout
+                            android:id="@+id/upcoming"
+                            android:layout_width="wrap_content"
+                            android:layout_height="200dp"
+                            android:orientation="horizontal"
+                            android:paddingEnd="50dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="0dp"
-                    android:id="@+id/five"
-                    android:textColor="?attr/colorPrimary"
-                    android:textStyle="bold"
-                    android:textSize="15sp"
-                    android:text="Dropped Shows">
-                </TextView>
+                        </LinearLayout>
+                    </HorizontalScrollView>
 
-                <HorizontalScrollView
-                    android:layout_marginTop="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="10dp"
-                    android:layout_marginBottom="100dp"
-                    android:scrollbars="none">
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/three"
                         android:layout_width="wrap_content"
-                        android:layout_height="200dp"
-                        android:paddingEnd="50dp"
-                        android:id="@+id/dropped"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="0dp"
+                        android:text="@string/plan"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="15sp"
+                        android:textStyle="bold"></TextView>
 
-                    </LinearLayout>
-                </HorizontalScrollView>
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp">
 
-            </LinearLayout>
-        </ScrollView>
+                        <LinearLayout
+                            android:id="@+id/planwatch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="200dp"
+                            android:orientation="horizontal"
+                            android:paddingEnd="50dp"
+                            android:scrollbars="none">
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:id="@+id/four"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="0dp"
+                        android:text="@string/completed"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="15sp"
+                        android:textStyle="bold"></TextView>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="10dp"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:id="@+id/completed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="200dp"
+                            android:orientation="horizontal"
+                            android:paddingEnd="50dp">
+
+                        </LinearLayout>
+
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:id="@+id/five"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="0dp"
+                        android:text="Dropped Shows"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="15sp"
+                        android:textStyle="bold"></TextView>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="100dp"
+                        android:paddingStart="10dp"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:id="@+id/dropped"
+                            android:layout_width="wrap_content"
+                            android:layout_height="200dp"
+                            android:orientation="horizontal"
+                            android:paddingEnd="50dp">
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                </LinearLayout>
+            </ScrollView>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:src="@drawable/gradient" />
+        </FrameLayout>
     </LinearLayout>
-
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="match_parent"
